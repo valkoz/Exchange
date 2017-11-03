@@ -11,25 +11,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import tinkoff.fintech.exchange.ExchangeActivity;
-import tinkoff.fintech.exchange.R;
+import java.util.ArrayList;
+import java.util.List;
 
-import static tinkoff.fintech.exchange.MainActivity.EXTRA_MESSAGE;
+import tinkoff.fintech.exchange.Currency;
+import tinkoff.fintech.exchange.ExchangeListAdapter;
+import tinkoff.fintech.exchange.R;
 
 //TODO: Custom ListView with favorite button
 //TODO: Custom ListAdapter sort elements as long click chosen -> favourites -> most frequently used -> others
 
 public class ExchangeFragment extends ListFragment {
 
+    private final String[] coins = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17"};
 
-
-    private final String[] coins = {"USD", "EUR", "RUB", "JPY", "GBP", "ETH", "BTC", "LOL", "OMG", "WTF", "KKK", "ZZZ", "VVV"};
-
-    public ExchangeFragment() {
-    }
+    public ExchangeFragment() {}
 
 
     public static ExchangeFragment newInstance() {
@@ -40,9 +40,23 @@ public class ExchangeFragment extends ListFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, coins);
+
+        ArrayAdapter<Currency> adapter = new ExchangeListAdapter(getActivity(), getModel());
         setListAdapter(adapter);
+    }
+
+    private List<Currency> getModel() {
+        List<Currency> list = new ArrayList<Currency>();
+        for (String coin: coins) {
+            list.add(get(coin));
+        }
+        // Первоначальный выбор одного из элементов
+        list.get(1).setChecked(true);
+        return list;
+    }
+
+    private Currency get(String s) {
+        return new Currency(s);
     }
 
     @Override
@@ -52,25 +66,4 @@ public class ExchangeFragment extends ListFragment {
         return inflater.inflate(R.layout.fragment_exchange, container, false);
     }
 
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        Intent intent = new Intent(getActivity(), ExchangeActivity.class);
-        String item = (String) getListAdapter().getItem(position);
-        intent.putExtra(EXTRA_MESSAGE, item);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            public boolean onItemLongClick(AdapterView<?> av, View v, int position, long id) {
-                Toast toast = Toast.makeText(getContext(), "Long Clicked", Toast.LENGTH_LONG);
-                toast.show();
-                return true;
-            }
-        });
-    }
 }

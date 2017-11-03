@@ -4,10 +4,19 @@
     android:layout_height="match_parent"
     tools:context="tinkoff.fintech.exchange.fragments.ExchangeFragment">
 
+    <TextView
+        android:id="@+id/selected_currency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="40dp"
+        android:textAlignment="center"/>
     <ListView
         android:id="@+id/android:list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="80dp">
     </ListView>
 
 </FrameLayout>

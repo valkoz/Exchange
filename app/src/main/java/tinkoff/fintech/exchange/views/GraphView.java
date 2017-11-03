@@ -11,7 +11,7 @@ import android.view.View;
 import java.util.List;
 
 //TODO: Enable float values instead of Point
-//TODO: Add date postfix and comparison of dates
+//TODO: Add date postfix and comparison of dates (171101 - as 01 November 2017, 180210 - as 10 February 2018)
 //FIXME: CRASH when creating graph with two similar Points
 
 public class GraphView extends View {
