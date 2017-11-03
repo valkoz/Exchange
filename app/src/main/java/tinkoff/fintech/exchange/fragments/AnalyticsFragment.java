@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.views.GraphView;
 
+@SuppressWarnings("ConstantConditions")
 public class AnalyticsFragment extends Fragment {
 
     public AnalyticsFragment() {
@@ -55,5 +57,24 @@ public class AnalyticsFragment extends Fragment {
 
         graph.setGridStep(20);
         graph.setLabelStep(5);
+
+        RadioGroup radioGroup = getActivity().findViewById(R.id.radioGroup);
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.analytics_filter_week :
+                        break;
+                    case R.id.analytics_filter_two_weeks :
+                        break;
+                    case R.id.analytics_filter_month :
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
     }
 }

@@ -5,7 +5,7 @@
         tools:context="tinkoff.fintech.exchange.ExchangeActivity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_gravity="center">
 
         <TextView
@@ -16,6 +16,7 @@
             android:textSize="30sp"
             />
         <EditText
+            android:id="@+id/exchange_input_decimal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="1"
@@ -23,10 +24,12 @@
             android:textSize="30sp"
             />
         <Button
+            android:id="@+id/exchange_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CHANGE"/>
         <TextView
+            android:id="@+id/exchange_result_decimal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="1.435"

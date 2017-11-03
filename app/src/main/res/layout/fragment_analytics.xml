@@ -45,5 +45,4 @@
             android:text="month"/>
 
     </RadioGroup>
-
 </RelativeLayout>
