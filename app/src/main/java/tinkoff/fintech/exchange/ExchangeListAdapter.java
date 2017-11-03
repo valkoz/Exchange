@@ -15,7 +15,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static tinkoff.fintech.exchange.MainActivity.EXTRA_MESSAGE;
+import static tinkoff.fintech.exchange.MainActivity.FROM_CURRENCY;
+import static tinkoff.fintech.exchange.MainActivity.TO_CURRENCY;
 
 //TODO: Save state
 //TODO: Delete longClicked Item - doesn't matters
@@ -44,11 +45,12 @@ public class ExchangeListAdapter extends ArrayAdapter<Currency> {
         View viewItem = null;
         if (convertView == null) {
 
-            LayoutInflater inflator = context.getLayoutInflater();
+            final LayoutInflater inflator = context.getLayoutInflater();
             viewItem = inflator.inflate(R.layout.item_list, null);
             final ViewHolder viewHolder = new ViewHolder();
             viewHolder.text = viewItem.findViewById(R.id.label);
             viewHolder.checkbox = viewItem.findViewById(R.id.check);
+            final TextView tv = context.findViewById(R.id.selected_currency);
 
             viewHolder.checkbox
                     .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -72,8 +74,10 @@ public class ExchangeListAdapter extends ArrayAdapter<Currency> {
                 public void onClick(View view) {
 
                     Intent intent = new Intent(context, ExchangeActivity.class);
-                    String item = viewHolder.text.getText().toString();
-                    intent.putExtra(EXTRA_MESSAGE, item);
+                    String toCurrency = viewHolder.text.getText().toString();
+                    String fromCurrency = tv.getText().toString();
+                    intent.putExtra(TO_CURRENCY, toCurrency);
+                    intent.putExtra(FROM_CURRENCY, fromCurrency);
                     context.startActivity(intent);
                 }
             });
@@ -83,7 +87,6 @@ public class ExchangeListAdapter extends ArrayAdapter<Currency> {
                 @Override
                 public boolean onLongClick(View view) {
 
-                    TextView tv = context.findViewById(R.id.selected_currency);
                     tv.setText(viewHolder.text.getText());
                     return true;
                 }

@@ -14,7 +14,9 @@ import tinkoff.fintech.exchange.fragments.HistoryFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String EXTRA_MESSAGE = "tinkoff.fintech.exchange.MESSAGE";
+    public static final String TO_CURRENCY = "tinkoff.fintech.exchange.TO_CURRENCY";
+    public static final String FROM_CURRENCY = "tinkoff.fintech.exchange.FROM_CURRENCY";
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {

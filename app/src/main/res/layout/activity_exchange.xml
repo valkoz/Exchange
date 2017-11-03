@@ -1,14 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="tinkoff.fintech.exchange.ExchangeActivity">
-
-    <TextView
-        android:id="@+id/first_currency"
-        android:layout_width="match_parent"
+ <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="tinkoff.fintech.exchange.ExchangeActivity"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
-</android.support.constraint.ConstraintLayout>
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/first_currency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="from"
+            android:textSize="30sp"
+            />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="1"
+            android:inputType="numberDecimal"
+            android:textSize="30sp"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CHANGE"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="1.435"
+            android:inputType="numberDecimal"
+            android:textSize="30sp"
+            />
+        <TextView
+            android:id="@+id/second_currency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="to"
+            android:textSize="30sp"
+            android:paddingLeft="10sp"
+            />
+
+</LinearLayout>

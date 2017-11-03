@@ -15,10 +15,17 @@ public class ExchangeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_exchange);
 
         Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        String from = intent.getStringExtra(MainActivity.FROM_CURRENCY);
 
         TextView textView = findViewById(R.id.first_currency);
-        textView.setText(message);
+        textView.setText(from);
+
+
+        String to = intent.getStringExtra(MainActivity.TO_CURRENCY);
+
+        TextView textView1 = findViewById(R.id.second_currency);
+        textView1.setText(to);
+
 
     }
 }
