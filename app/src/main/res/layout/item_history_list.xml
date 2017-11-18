@@ -6,29 +6,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/history_datetime"
-        android:textSize="26dp"
-        android:layout_marginRight="40dp"
+        android:textSize="20dp"
+        android:textColor="@color/colorAccent"
         android:hint="datetime"/>
 
     <TextView
         android:id="@+id/history_from"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:hint="from"
         android:text="@+id/history_from"
-        android:textSize="26dp" />
+        android:textColor="@color/colorAccent"
+        android:textSize="20dp" />
 
     <TextView
         android:id="@+id/history_to"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="150dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:hint="to"
         android:text="@+id/history_to"
-        android:textSize="26dp" />
+        android:textColor="@color/colorAccent"
+        android:textSize="20dp" />
 
 
     <TextView
@@ -36,19 +37,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:hint="f_v"
         android:text="@+id/history_from_value"
-        android:textSize="26dp" />
+        android:textColor="@color/colorAccent"
+        android:textSize="20dp" />
 
     <TextView
         android:id="@+id/history_to_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="200dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:hint="t_v"
         android:text="@+id/history_to_value"
-        android:textSize="26dp" />
+        android:textColor="@color/colorAccent"
+        android:textSize="20dp" />
 
 </RelativeLayout>

@@ -8,8 +8,10 @@ import java.util.Locale;
 public class Formatter {
 
     public static String decimal(double result) {
-        if (result > 10000)
+        if (result > 1000000)
             return String.format(Locale.US, "%.1E", result);
+        else if (result > 1000)
+            return String.format(Locale.US, "%,d", (int) result);
         else if (result > 100)
             return String.format(Locale.US, "%d", (int) result);
         else if (result >= 1)
