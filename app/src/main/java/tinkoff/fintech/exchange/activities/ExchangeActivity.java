@@ -10,55 +10,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import tinkoff.fintech.exchange.AppDatabase;
-import tinkoff.fintech.exchange.BuildConfig;
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.model.ExchangeOperation;
-import tinkoff.fintech.exchange.network.Api;
 import tinkoff.fintech.exchange.network.ApiResponse;
-import tinkoff.fintech.exchange.network.RateObject;
-import tinkoff.fintech.exchange.network.RatesDeserializer;
+import tinkoff.fintech.exchange.network.RetrofitClient;
 import tinkoff.fintech.exchange.util.Formatter;
 
 public class ExchangeActivity extends AppCompatActivity {
 
-    private OkHttpClient client = new OkHttpClient.Builder()
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .addInterceptor(getLoggingInterceptor())
-            .build();
-
-    private Gson gson = new GsonBuilder().registerTypeAdapter(RateObject.class, new RatesDeserializer()).create();
-    private Retrofit retrofit = new Retrofit.Builder()
-            .client(client)
-            .baseUrl("http://api.fixer.io/")
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build();
-
-    private Api service = retrofit.create(Api.class);
-
-    public Interceptor getLoggingInterceptor() {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
-        return interceptor;
-    }
-
     private void sendRequest(String from, String to) {
-        Call<ApiResponse> responseCall = service.latest(from, to);
+        Call<ApiResponse> responseCall = RetrofitClient.getInstance().getService().latest(from, to);
         responseCall.enqueue(new retrofit2.Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
