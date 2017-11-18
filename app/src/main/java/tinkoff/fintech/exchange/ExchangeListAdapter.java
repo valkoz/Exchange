@@ -2,6 +2,7 @@ package tinkoff.fintech.exchange;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,20 +13,17 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import static tinkoff.fintech.exchange.MainActivity.FROM_CURRENCY;
 import static tinkoff.fintech.exchange.MainActivity.TO_CURRENCY;
 
-//TODO: Save state
-//TODO: Delete longClicked Item - doesn't matters
-//TODO: Exchange Activity
 
 public class ExchangeListAdapter extends ArrayAdapter<Currency> {
 
     private final Activity context;
     private List<Currency> currencies;
+    private Currency choosenCurrency;
 
     public ExchangeListAdapter(Activity context, List<Currency> list) {
         super(context, R.layout.item_list, list);
@@ -58,11 +56,17 @@ public class ExchangeListAdapter extends ArrayAdapter<Currency> {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView,
                                                      boolean isChecked) {
+
+                            //get clicked item
                             Currency element = (Currency) viewHolder.checkbox
                                     .getTag();
-                            element.setChecked(buttonView.isChecked());
+                            //set him to favourite
+                            element.setFavourite(buttonView.isChecked());
+                            //update in db
+                            AsyncTask.execute(() -> AppDatabase.getAppDatabase(context).currencyDao().update(element));
 
-                            sort();
+                            Collections.sort(currencies);
+
                             notifyDataSetChanged();
 
                         }
@@ -87,6 +91,26 @@ public class ExchangeListAdapter extends ArrayAdapter<Currency> {
                 @Override
                 public boolean onLongClick(View view) {
 
+                    //add to list
+                    if (choosenCurrency != null)
+                        currencies.add(choosenCurrency);
+
+                    //get clicked item
+                    Currency element = (Currency) viewHolder.checkbox
+                            .getTag();
+                    element.increaseUseFrequency();
+
+                    //update db
+                    AsyncTask.execute(() -> AppDatabase.getAppDatabase(context).currencyDao().update(element));
+
+                    //remove from list
+                    choosenCurrency = element;
+                    currencies.remove(element);
+
+                    Collections.sort(currencies);
+
+                    notifyDataSetChanged();
+
                     tv.setText(viewHolder.text.getText());
                     return true;
                 }
@@ -100,17 +124,9 @@ public class ExchangeListAdapter extends ArrayAdapter<Currency> {
         }
         ViewHolder holder = (ViewHolder) viewItem.getTag();
         holder.text.setText(currencies.get(position).getName());
-        holder.checkbox.setChecked(currencies.get(position).isChecked());
+        holder.checkbox.setChecked(currencies.get(position).isFavourite());
 
         return viewItem;
     }
 
-    private void sort() {
-        Collections.sort(currencies, new Comparator<Currency>() {
-            @Override
-            public int compare(Currency a, Currency b) {
-                return Boolean.compare(!a.isChecked(), !b.isChecked());
-            }
-        });
-    }
 }

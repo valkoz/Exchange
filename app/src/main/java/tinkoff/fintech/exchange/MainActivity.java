@@ -1,11 +1,14 @@
 package tinkoff.fintech.exchange;
 
-import android.support.v4.app.Fragment;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 import tinkoff.fintech.exchange.fragments.AnalyticsFragment;
@@ -17,6 +20,12 @@ public class MainActivity extends AppCompatActivity {
     public static final String TO_CURRENCY = "tinkoff.fintech.exchange.TO_CURRENCY";
     public static final String FROM_CURRENCY = "tinkoff.fintech.exchange.FROM_CURRENCY";
 
+    private AppDatabase db;
+
+    private final String[] coins = {
+            "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK",
+            "DKK", "GBP", "HKD", "HRK", "IDR", "HUF",
+            "ILS", "JPY", "USD", "EUR", "RUB"};
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -49,12 +58,38 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        db = AppDatabase.getAppDatabase(getApplicationContext());
+        checkFirstRun();
+
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         chooseFragment(ExchangeFragment.newInstance());
         navigation.getMenu().getItem(1).setChecked(true);
 
+    }
+
+    private void checkFirstRun() {
+
+        final String PREFS_NAME = "MyPrefsFile";
+        final String PREF_VERSION_CODE_KEY = "version_code";
+        final int DOESNT_EXIST = -1;
+
+        int currentVersionCode = BuildConfig.VERSION_CODE;
+
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        int savedVersionCode = prefs.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST);
+
+        if (currentVersionCode == savedVersionCode) {
+            return;
+        } else if (savedVersionCode == DOESNT_EXIST) {
+            Log.i("DatabaseInfo", "first run initialization");
+            for (String coin: coins) {
+                AsyncTask.execute(() -> AppDatabase.getAppDatabase(getApplicationContext()).currencyDao().insertAll(new Currency(coin)));
+            }
+        }
+
+        prefs.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode).apply();
     }
 
 }

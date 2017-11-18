@@ -10,10 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
+import tinkoff.fintech.exchange.AppDatabase;
 import tinkoff.fintech.exchange.Currency;
+import tinkoff.fintech.exchange.DaoTasks.GetAllCurrencies;
 import tinkoff.fintech.exchange.ExchangeListAdapter;
 import tinkoff.fintech.exchange.R;
 
@@ -22,39 +24,28 @@ import tinkoff.fintech.exchange.R;
 
 public class ExchangeFragment extends ListFragment {
 
-    private final String[] coins = {
-            "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK",
-            "DKK", "GBP", "HKD", "HRK", "IDR", "HUF",
-            "ILS", "JPY", "USD", "EUR", "RUB"};
 
     public ExchangeFragment() {}
 
-
     public static ExchangeFragment newInstance() {
-        ExchangeFragment fragment = new ExchangeFragment();
-        return fragment;
+        return new ExchangeFragment();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ArrayAdapter<Currency> adapter = new ExchangeListAdapter(getActivity(), getModel());
+        ArrayAdapter<Currency> adapter = null;
+        try {
+            adapter = new ExchangeListAdapter(getActivity(), getModel());
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
         setListAdapter(adapter);
     }
 
-    private List<Currency> getModel() {
-        List<Currency> list = new ArrayList<Currency>();
-        for (String coin: coins) {
-            list.add(get(coin));
-        }
-        // Первоначальный выбор одного из элементов
-        list.get(1).setChecked(true);
-        return list;
-    }
-
-    private Currency get(String s) {
-        return new Currency(s);
+    private List<Currency> getModel() throws ExecutionException, InterruptedException {
+        return new GetAllCurrencies(AppDatabase.getAppDatabase(getContext())).execute().get();
     }
 
     @Override

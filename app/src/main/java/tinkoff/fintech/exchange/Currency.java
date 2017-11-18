@@ -1,19 +1,37 @@
 package tinkoff.fintech.exchange;
 
-public class Currency {
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
+@Entity
+public class Currency implements Comparable<Currency>{
+    @PrimaryKey(autoGenerate = true)
+    private long id;
     private String name;
-    private boolean isChecked;
+    private boolean isFavourite;
+    private int useFrequency;
+
+    public int getUseFrequency() {
+        return useFrequency;
+    }
+
+    public void setUseFrequency(int useFrequency) {
+        this.useFrequency = useFrequency;
+    }
 
     public Currency(String n, boolean c) {
         name = n;
-        isChecked = c;
+        isFavourite = c;
     }
 
     public Currency(String n) {
         name = n;
-        isChecked = false;
+        isFavourite = false;
      }
+
+    public Currency() {
+    }
 
     public String getName() {
         return name;
@@ -23,12 +41,32 @@ public class Currency {
         this.name = name;
     }
 
-    public boolean isChecked() {
-        return isChecked;
+    public boolean isFavourite() {
+        return isFavourite;
     }
 
-    public void setChecked(boolean checked) {
-        isChecked = checked;
+    public void setFavourite(boolean favourite) {
+        isFavourite = favourite;
     }
 
+    @Override
+    public int compareTo(@NonNull Currency other) {
+
+        int i = Boolean.compare(!isFavourite, !other.isFavourite);
+        if (i != 0) return i;
+
+        return Integer.compare(other.useFrequency, useFrequency);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void increaseUseFrequency() {
+        useFrequency++;
+    }
 }
