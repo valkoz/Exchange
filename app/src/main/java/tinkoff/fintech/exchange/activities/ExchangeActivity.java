@@ -1,10 +1,10 @@
 package tinkoff.fintech.exchange.activities;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
@@ -23,12 +23,15 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import tinkoff.fintech.exchange.AppDatabase;
 import tinkoff.fintech.exchange.BuildConfig;
 import tinkoff.fintech.exchange.R;
+import tinkoff.fintech.exchange.model.ExchangeOperation;
 import tinkoff.fintech.exchange.network.Api;
 import tinkoff.fintech.exchange.network.ApiResponse;
 import tinkoff.fintech.exchange.network.RateObject;
 import tinkoff.fintech.exchange.network.RatesDeserializer;
+import tinkoff.fintech.exchange.util.Formatter;
 
 public class ExchangeActivity extends AppCompatActivity {
 
@@ -64,9 +67,15 @@ public class ExchangeActivity extends AppCompatActivity {
                 double rate = response.body().getRates().getRate();
                 double mul = Double.parseDouble(ed.getText().toString());
                 double result = rate * mul;
-                String res = new BigDecimal(result).setScale(3, BigDecimal.ROUND_UP).toString();
+                String res = Formatter.decimal(result);
 
                 tv.setText(res);
+
+                ExchangeOperation operation = new ExchangeOperation(Calendar.getInstance().getTime(),
+                        from, to, mul, result);
+                AsyncTask.execute(() -> AppDatabase.getAppDatabase(getApplicationContext())
+                        .exchangeOperationDao()
+                        .insertAll(operation));
             }
 
             @Override
@@ -96,12 +105,7 @@ public class ExchangeActivity extends AppCompatActivity {
         textView1.setText(to);
 
         Button button = findViewById(R.id.exchange_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendRequest(from, to);
-            }
-        });
+        button.setOnClickListener(view -> sendRequest(from, to));
 
     }
 }

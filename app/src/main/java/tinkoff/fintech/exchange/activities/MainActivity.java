@@ -3,13 +3,11 @@ package tinkoff.fintech.exchange.activities;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MenuItem;
 
 import tinkoff.fintech.exchange.AppDatabase;
 import tinkoff.fintech.exchange.BuildConfig;
@@ -24,32 +22,21 @@ public class MainActivity extends AppCompatActivity {
     public static final String TO_CURRENCY = "tinkoff.fintech.exchange.TO_CURRENCY";
     public static final String FROM_CURRENCY = "tinkoff.fintech.exchange.FROM_CURRENCY";
 
-    private AppDatabase db;
-
-    private final String[] coins = {
-            "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK",
-            "DKK", "GBP", "HKD", "HRK", "IDR", "HUF",
-            "ILS", "JPY", "USD", "EUR", "RUB"};
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_history:
-                    chooseFragment(HistoryFragment.newInstance());
-                    return true;
-                case R.id.navigation_exchange:
-                    chooseFragment(ExchangeFragment.newInstance());
-                    return true;
-                case R.id.navigation_analytics:
-                    chooseFragment(AnalyticsFragment.newInstance());
-                    return true;
-            }
-            return false;
-        }
-    };
+            = item -> {
+                switch (item.getItemId()) {
+                    case R.id.navigation_history:
+                        chooseFragment(HistoryFragment.newInstance());
+                        return true;
+                    case R.id.navigation_exchange:
+                        chooseFragment(ExchangeFragment.newInstance());
+                        return true;
+                    case R.id.navigation_analytics:
+                        chooseFragment(AnalyticsFragment.newInstance());
+                        return true;
+                }
+                return false;
+            };
 
     private void chooseFragment(Fragment selectedFragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -61,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        db = AppDatabase.getAppDatabase(getApplicationContext());
         checkFirstRun();
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
@@ -74,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkFirstRun() {
+
+        final String[] coins = {
+                "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK",
+                "DKK", "GBP", "HKD", "HRK", "IDR", "HUF",
+                "ILS", "JPY", "USD", "EUR", "RUB"};
 
         final String PREFS_NAME = "MyPrefsFile";
         final String PREF_VERSION_CODE_KEY = "version_code";

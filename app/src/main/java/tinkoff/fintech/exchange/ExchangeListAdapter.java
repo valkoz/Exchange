@@ -66,7 +66,9 @@ public class ExchangeListAdapter extends ArrayAdapter<Currency> {
                             //set him to favourite
                             element.setFavourite(buttonView.isChecked());
                             //update in db
-                            AsyncTask.execute(() -> AppDatabase.getAppDatabase(context).currencyDao().update(element));
+                            AsyncTask.execute(() -> AppDatabase.getAppDatabase(context).
+                                    currencyDao()
+                                    .update(element));
 
                             Collections.sort(currencies);
 
@@ -104,7 +106,9 @@ public class ExchangeListAdapter extends ArrayAdapter<Currency> {
                     element.increaseUseFrequency();
 
                     //update db
-                    AsyncTask.execute(() -> AppDatabase.getAppDatabase(context).currencyDao().update(element));
+                    AsyncTask.execute(() -> AppDatabase.getAppDatabase(context)
+                            .currencyDao()
+                            .update(element));
 
                     //remove from list
                     choosenCurrency = element;
