@@ -1,4 +1,4 @@
-package tinkoff.fintech.exchange;
+package tinkoff.fintech.exchange.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;

@@ -15,8 +15,11 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.List;
 
-import static tinkoff.fintech.exchange.MainActivity.FROM_CURRENCY;
-import static tinkoff.fintech.exchange.MainActivity.TO_CURRENCY;
+import tinkoff.fintech.exchange.activities.ExchangeActivity;
+import tinkoff.fintech.exchange.model.Currency;
+
+import static tinkoff.fintech.exchange.activities.MainActivity.FROM_CURRENCY;
+import static tinkoff.fintech.exchange.activities.MainActivity.TO_CURRENCY;
 
 
 public class ExchangeListAdapter extends ArrayAdapter<Currency> {

@@ -14,16 +14,13 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import tinkoff.fintech.exchange.AppDatabase;
-import tinkoff.fintech.exchange.Currency;
-import tinkoff.fintech.exchange.DaoTasks.GetAllCurrencies;
+import tinkoff.fintech.exchange.model.Currency;
+import tinkoff.fintech.exchange.daoTasks.GetAllCurrencies;
 import tinkoff.fintech.exchange.ExchangeListAdapter;
 import tinkoff.fintech.exchange.R;
 
-//TODO: Custom ListView with favorite button
-//TODO: Custom ListAdapter sort elements as long click chosen -> favourites -> most frequently used -> others
 
 public class ExchangeFragment extends ListFragment {
-
 
     public ExchangeFragment() {}
 

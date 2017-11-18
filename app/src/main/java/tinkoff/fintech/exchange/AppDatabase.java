@@ -5,6 +5,9 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import tinkoff.fintech.exchange.dao.CurrencyDao;
+import tinkoff.fintech.exchange.model.Currency;
+
 @Database(entities = {Currency.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 

@@ -1,11 +1,11 @@
-package tinkoff.fintech.exchange.DaoTasks;
+package tinkoff.fintech.exchange.daoTasks;
 
 import android.os.AsyncTask;
 
 import java.util.List;
 
 import tinkoff.fintech.exchange.AppDatabase;
-import tinkoff.fintech.exchange.Currency;
+import tinkoff.fintech.exchange.model.Currency;
 
 
 public class GetAllCurrencies extends AsyncTask<Void, Void, List<Currency>> {
@@ -18,12 +18,6 @@ public class GetAllCurrencies extends AsyncTask<Void, Void, List<Currency>> {
 
     @Override
     protected List<Currency> doInBackground(Void... voids) {
-        List<Currency> nodes = db.currencyDao().getAll();
-        return nodes;
-    }
-
-    @Override
-    protected void onPostExecute(List<Currency> nodes) {
-        super.onPostExecute(nodes);
+        return db.currencyDao().getAll();
     }
 }
