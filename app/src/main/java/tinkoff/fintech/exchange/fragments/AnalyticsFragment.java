@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,11 @@ import android.widget.RadioGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Response;
 import tinkoff.fintech.exchange.R;
+import tinkoff.fintech.exchange.network.AnalyticsResponse;
+import tinkoff.fintech.exchange.network.RetrofitClient;
 import tinkoff.fintech.exchange.views.GraphView;
 
 @SuppressWarnings("ConstantConditions")
@@ -39,6 +44,9 @@ public class AnalyticsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        sendRequest("2000-01-03");
+
         List<Point> items = new ArrayList<>();
         items.add(new Point(1, 63));
         items.add(new Point(2, 62));
@@ -76,5 +84,20 @@ public class AnalyticsFragment extends Fragment {
             }
         });
 
+    }
+
+    private void sendRequest(String date) {
+        Call<AnalyticsResponse> responseCall = RetrofitClient.getInstance().getService().byDate(date);
+        responseCall.enqueue(new retrofit2.Callback<AnalyticsResponse>() {
+            @Override
+            public void onResponse(Call<AnalyticsResponse> call, Response<AnalyticsResponse> response) {
+                Log.i("Retrofit2", response.body().getRates().toString());
+            }
+
+            @Override
+            public void onFailure(Call<AnalyticsResponse> call, Throwable t) {
+                Log.i("Retrofit2", t.getMessage());
+            }
+        });
     }
 }
