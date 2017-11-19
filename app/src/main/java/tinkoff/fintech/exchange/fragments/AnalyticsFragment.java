@@ -18,7 +18,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Response;
 import tinkoff.fintech.exchange.R;
-import tinkoff.fintech.exchange.network.AnalyticsResponse;
+import tinkoff.fintech.exchange.network.ApiResponse;
 import tinkoff.fintech.exchange.network.RetrofitClient;
 import tinkoff.fintech.exchange.views.GraphView;
 
@@ -45,7 +45,7 @@ public class AnalyticsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        sendRequest("2000-01-03");
+        sendRequest("2016-07-03", "RUB");
 
         List<Point> items = new ArrayList<>();
         items.add(new Point(1, 63));
@@ -86,16 +86,16 @@ public class AnalyticsFragment extends Fragment {
 
     }
 
-    private void sendRequest(String date) {
-        Call<AnalyticsResponse> responseCall = RetrofitClient.getInstance().getService().byDate(date);
-        responseCall.enqueue(new retrofit2.Callback<AnalyticsResponse>() {
+    private void sendRequest(String date, String to) {
+        Call<ApiResponse> responseCall = RetrofitClient.getInstance().getService().byDate(date, to);
+        responseCall.enqueue(new retrofit2.Callback<ApiResponse>() {
             @Override
-            public void onResponse(Call<AnalyticsResponse> call, Response<AnalyticsResponse> response) {
-                Log.i("Retrofit2", response.body().getRates().toString());
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                Log.i("Retrofit2", response.body().getRates().getName() + " : " + response.body().getRates().getRate());
             }
 
             @Override
-            public void onFailure(Call<AnalyticsResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Log.i("Retrofit2", t.getMessage());
             }
         });

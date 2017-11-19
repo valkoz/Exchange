@@ -14,5 +14,8 @@ public interface Api {
     );
 
     @GET("{date}") //format: 2000-01-03
-    Call<AnalyticsResponse> byDate(@Path("date") String date);
+    Call<ApiResponse> byDate(
+            @Path("date") String date,
+            @Query("symbols") String to
+    );
 }
