@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/history_datetime"
         android:textSize="20dp"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorPrimary"
         android:hint="datetime"/>
 
     <TextView
@@ -17,7 +17,7 @@
         android:layout_marginTop="20dp"
         android:hint="from"
         android:text="@+id/history_from"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorPrimary"
         android:textSize="20dp" />
 
     <TextView
@@ -28,7 +28,7 @@
         android:layout_marginTop="20dp"
         android:hint="to"
         android:text="@+id/history_to"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorPrimary"
         android:textSize="20dp" />
 
 
@@ -40,7 +40,7 @@
         android:layout_marginTop="20dp"
         android:hint="f_v"
         android:text="@+id/history_from_value"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorPrimary"
         android:textSize="20dp" />
 
     <TextView
@@ -51,7 +51,7 @@
         android:layout_marginTop="20dp"
         android:hint="t_v"
         android:text="@+id/history_to_value"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorPrimary"
         android:textSize="20dp" />
 
 </RelativeLayout>

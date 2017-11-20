@@ -5,14 +5,16 @@
         android:text="@+id/label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
         android:id="@+id/label"
-        android:textSize="26dp"
-        android:layout_marginRight="40dp"/>
+        android:textSize="26sp"
+        android:layout_marginEnd="40dp"/>
     <CheckBox
         android:id="@+id/check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentRight="true" />
+        style="?android:attr/starStyle"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="10dp"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
