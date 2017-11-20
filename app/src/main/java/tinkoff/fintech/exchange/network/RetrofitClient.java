@@ -8,6 +8,8 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import tinkoff.fintech.exchange.BuildConfig;
@@ -53,6 +55,25 @@ public class RetrofitClient {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
         return interceptor;
+    }
+
+    public static void sendRequest(final RateCallback callback, String from, String to) {
+        Call<ApiResponse> responseCall = RetrofitClient.getInstance().getService().latest(from, to);
+        responseCall.enqueue(new retrofit2.Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                RateObject rate = response.body().getRates();
+                if (rate != null)
+                    callback.onSuccess(rate);
+                else
+                    callback.onError(ErrorType.NULL_BODY);
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                callback.onError(ErrorType.REQUEST_ERROR);
+            }
+        });
     }
 
 }
