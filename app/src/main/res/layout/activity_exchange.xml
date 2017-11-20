@@ -19,7 +19,6 @@
             android:id="@+id/exchange_input_decimal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="1"
             android:inputType="numberDecimal"
             android:textSize="30sp"
             />
@@ -32,7 +31,6 @@
             android:id="@+id/exchange_result_decimal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="1.435"
             android:inputType="numberDecimal"
             android:textSize="30sp"
             />
