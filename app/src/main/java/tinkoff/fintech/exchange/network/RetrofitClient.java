@@ -1,5 +1,7 @@
 package tinkoff.fintech.exchange.network;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -59,6 +61,25 @@ public class RetrofitClient {
 
     public static void sendRequest(final RateCallback callback, String from, String to) {
         Call<ApiResponse> responseCall = RetrofitClient.getInstance().getService().latest(from, to);
+        responseCall.enqueue(new retrofit2.Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                RateObject rate = response.body().getRates();
+                if (rate != null)
+                    callback.onSuccess(rate);
+                else
+                    callback.onError(ErrorType.NULL_BODY);
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                callback.onError(ErrorType.REQUEST_ERROR);
+            }
+        });
+    }
+
+    public void sendRequestWithDate(final RateCallback callback, String date, String to) {
+        Call<ApiResponse> responseCall = RetrofitClient.getInstance().getService().byDate(date, to);
         responseCall.enqueue(new retrofit2.Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {

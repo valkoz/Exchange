@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,9 @@ import retrofit2.Call;
 import retrofit2.Response;
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.network.ApiResponse;
+import tinkoff.fintech.exchange.network.ErrorType;
+import tinkoff.fintech.exchange.network.RateCallback;
+import tinkoff.fintech.exchange.network.RateObject;
 import tinkoff.fintech.exchange.network.RetrofitClient;
 import tinkoff.fintech.exchange.views.GraphView;
 
@@ -45,7 +49,21 @@ public class AnalyticsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        sendRequest("2016-07-03", "RUB");
+        RateCallback rateCallback = new RateCallback() {
+            @Override
+            public void onSuccess(RateObject rate) {
+                Toast.makeText(getContext(), rate.getName() + rate.getRate(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(ErrorType type) {
+                Toast.makeText(getContext(),
+                        "Error",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+        };
+        RetrofitClient.getInstance().sendRequestWithDate(rateCallback,"2016-07-03", "RUB" );
 
         List<Point> items = new ArrayList<>();
         items.add(new Point(1, 63));
@@ -86,18 +104,4 @@ public class AnalyticsFragment extends Fragment {
 
     }
 
-    private void sendRequest(String date, String to) {
-        Call<ApiResponse> responseCall = RetrofitClient.getInstance().getService().byDate(date, to);
-        responseCall.enqueue(new retrofit2.Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                Log.i("Retrofit2", response.body().getRates().getName() + " : " + response.body().getRates().getRate());
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.i("Retrofit2", t.getMessage());
-            }
-        });
-    }
 }
