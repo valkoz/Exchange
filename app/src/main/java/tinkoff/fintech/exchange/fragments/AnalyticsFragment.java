@@ -14,6 +14,8 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -24,10 +26,18 @@ import tinkoff.fintech.exchange.network.ErrorType;
 import tinkoff.fintech.exchange.network.RateCallback;
 import tinkoff.fintech.exchange.network.RateObject;
 import tinkoff.fintech.exchange.network.RetrofitClient;
+import tinkoff.fintech.exchange.util.CalendarIterator;
+import tinkoff.fintech.exchange.util.Formatter;
 import tinkoff.fintech.exchange.views.GraphView;
 
 @SuppressWarnings("ConstantConditions")
 public class AnalyticsFragment extends Fragment {
+
+    public enum Period {
+        WEEK,
+        TWO_WEEKS,
+        MOUNTH
+    }
 
     public AnalyticsFragment() {
         // Required empty public constructor
@@ -53,6 +63,7 @@ public class AnalyticsFragment extends Fragment {
             @Override
             public void onSuccess(RateObject rate) {
                 Toast.makeText(getContext(), rate.getName() + rate.getRate(), Toast.LENGTH_SHORT).show();
+                //TODO: Add Point to graphList as items.add(new Point(rate.getDate(), rate.getRate));
             }
 
             @Override
@@ -63,7 +74,6 @@ public class AnalyticsFragment extends Fragment {
                         .show();
             }
         };
-        RetrofitClient.getInstance().sendRequestWithDate(rateCallback,"2016-07-03", "RUB" );
 
         List<Point> items = new ArrayList<>();
         items.add(new Point(1, 63));
@@ -89,15 +99,24 @@ public class AnalyticsFragment extends Fragment {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                List<Date> dates = new ArrayList<>();
+
                 switch (checkedId){
                     case R.id.analytics_filter_week :
+                        dates = CalendarIterator.getLast(Period.WEEK);
                         break;
                     case R.id.analytics_filter_two_weeks :
+                        dates = CalendarIterator.getLast(Period.TWO_WEEKS);
                         break;
                     case R.id.analytics_filter_month :
+                        dates = CalendarIterator.getLast(Period.MOUNTH);
                         break;
                     default:
                         break;
+                }
+
+                for (Date date: dates) {
+                    RetrofitClient.getInstance().sendRequestWithDate(rateCallback, Formatter.dateToRestrofit(date), "RUB" );
                 }
             }
         });

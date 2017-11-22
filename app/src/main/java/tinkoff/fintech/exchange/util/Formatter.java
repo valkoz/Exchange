@@ -24,4 +24,9 @@ public class Formatter {
         return  new SimpleDateFormat(
                 "dd MMM ''yy 'at' HH:mm", Locale.US).format(date);
     }
+
+    public static String dateToRestrofit(Date date) {
+        return  new SimpleDateFormat(
+                "yyyy-MM-dd", Locale.US).format(date);
+    }
 }
