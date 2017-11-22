@@ -2,28 +2,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="tinkoff.fintech.exchange.fragments.AnalyticsFragment">
 
     <tinkoff.fintech.exchange.views.GraphView
-            android:id="@+id/graphView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="#eee"
-            android:layout_marginTop="80dp"/>
+        android:id="@+id/graphView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/android:list"
+        android:layout_gravity="center"
+        android:background="#eee" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="24dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
 
         <RadioButton
             android:id="@+id/analytics_filter_week"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
             android:layout_weight="1"
             android:text="week"/>
 
@@ -31,7 +35,7 @@
             android:id="@+id/analytics_filter_two_weeks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
             android:layout_weight="1"
             android:text="two weeks"/>
 
@@ -39,9 +43,16 @@
             android:id="@+id/analytics_filter_month"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
             android:layout_weight="1"
             android:text="month"/>
 
     </RadioGroup>
+
+    <ListView
+        android:id="@+id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/radioGroup">
+    </ListView>
 </RelativeLayout>

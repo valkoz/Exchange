@@ -11,6 +11,7 @@ import android.util.Log;
 
 import tinkoff.fintech.exchange.AppDatabase;
 import tinkoff.fintech.exchange.BuildConfig;
+import tinkoff.fintech.exchange.CurrencyName;
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.fragments.AnalyticsFragment;
 import tinkoff.fintech.exchange.fragments.ExchangeFragment;
@@ -59,12 +60,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkFirstRun() {
-
-        final String[] coins = {
-                "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK",
-                "DKK", "GBP", "HKD", "HRK", "IDR", "HUF",
-                "ILS", "JPY", "USD", "EUR", "RUB"};
-
+        
         final String PREFS_NAME = "MyPrefsFile";
         final String PREF_VERSION_CODE_KEY = "version_code";
         final int DOESNT_EXIST = -1;
@@ -78,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         } else if (savedVersionCode == DOESNT_EXIST) {
             Log.i("DatabaseInfo", "first run initialization");
-            for (String coin: coins) {
-                AsyncTask.execute(() -> AppDatabase.getAppDatabase(getApplicationContext()).currencyDao().insertAll(new Currency(coin)));
+            for (CurrencyName coin: CurrencyName.values()) {
+                AsyncTask.execute(() -> AppDatabase.getAppDatabase(getApplicationContext()).currencyDao().insertAll(new Currency(coin.name())));
             }
         }
 

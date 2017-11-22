@@ -5,23 +5,22 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Response;
+import tinkoff.fintech.exchange.CurrencyName;
 import tinkoff.fintech.exchange.R;
-import tinkoff.fintech.exchange.network.ApiResponse;
 import tinkoff.fintech.exchange.network.ErrorType;
 import tinkoff.fintech.exchange.network.RateCallback;
 import tinkoff.fintech.exchange.network.RateObject;
@@ -30,8 +29,7 @@ import tinkoff.fintech.exchange.util.CalendarIterator;
 import tinkoff.fintech.exchange.util.Formatter;
 import tinkoff.fintech.exchange.views.GraphView;
 
-@SuppressWarnings("ConstantConditions")
-public class AnalyticsFragment extends Fragment {
+public class AnalyticsFragment extends ListFragment {
 
     public enum Period {
         WEEK,
@@ -58,6 +56,15 @@ public class AnalyticsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+         List<String> coins = new ArrayList<>();
+        for (CurrencyName coin: CurrencyName.values()) {
+            coins.add(coin.name());
+        }
+
+        ArrayAdapter<String> adapter  =  new  ArrayAdapter<>(
+                getActivity(), android.R.layout.simple_list_item_1, coins);
+        setListAdapter(adapter);
 
         RateCallback rateCallback = new RateCallback() {
             @Override
@@ -123,4 +130,9 @@ public class AnalyticsFragment extends Fragment {
 
     }
 
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        String s = ((TextView) v).getText().toString();
+        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+    }
 }
