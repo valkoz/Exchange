@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -19,7 +20,6 @@ import tinkoff.fintech.exchange.daoTasks.GetAllCurrencies;
 import tinkoff.fintech.exchange.ExchangeListAdapter;
 import tinkoff.fintech.exchange.R;
 
-//TODO: FIXME Incorrect ListView state when download, adapter.notifyDataSetChanged() after init doesn't helps
 public class ExchangeFragment extends ListFragment {
 
     public ExchangeFragment() {}
@@ -34,7 +34,9 @@ public class ExchangeFragment extends ListFragment {
 
         ArrayAdapter<Currency> adapter = null;
         try {
-            adapter = new ExchangeListAdapter(getActivity(), getModel());
+            List<Currency> currencies = getModel();
+            Collections.sort(currencies);
+            adapter = new ExchangeListAdapter(getActivity(), currencies);
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
