@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,9 @@ import tinkoff.fintech.exchange.util.Formatter;
 import tinkoff.fintech.exchange.views.GraphView;
 
 public class AnalyticsFragment extends ListFragment {
+
+    RadioGroup radioGroup;
+    RateCallback rateCallback;
 
     public enum Period {
         WEEK,
@@ -66,7 +70,7 @@ public class AnalyticsFragment extends ListFragment {
                 getActivity(), android.R.layout.simple_list_item_1, coins);
         setListAdapter(adapter);
 
-        RateCallback rateCallback = new RateCallback() {
+        rateCallback = new RateCallback() {
             @Override
             public void onSuccess(RateObject rate) {
                 Toast.makeText(getContext(), rate.getName() + rate.getRate(), Toast.LENGTH_SHORT).show();
@@ -101,38 +105,32 @@ public class AnalyticsFragment extends ListFragment {
         graph.setGridStep(20);
         graph.setLabelStep(5);
 
-        RadioGroup radioGroup = getActivity().findViewById(R.id.radioGroup);
-
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                List<Date> dates = new ArrayList<>();
-
-                switch (checkedId){
-                    case R.id.analytics_filter_week :
-                        dates = CalendarIterator.getLast(Period.WEEK);
-                        break;
-                    case R.id.analytics_filter_two_weeks :
-                        dates = CalendarIterator.getLast(Period.TWO_WEEKS);
-                        break;
-                    case R.id.analytics_filter_month :
-                        dates = CalendarIterator.getLast(Period.MOUNTH);
-                        break;
-                    default:
-                        break;
-                }
-
-                for (Date date: dates) {
-                    RetrofitClient.getInstance().sendRequestWithDate(rateCallback, Formatter.dateToRestrofit(date), "RUB" );
-                }
-            }
-        });
+        radioGroup = getActivity().findViewById(R.id.radioGroup);
 
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        String s = ((TextView) v).getText().toString();
-        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+
+        String currencyName = ((TextView) v).getText().toString();
+        List<Date> dates = new ArrayList<>();
+        switch (radioGroup.getCheckedRadioButtonId()){
+            case R.id.analytics_filter_week :
+                dates = CalendarIterator.getLast(Period.WEEK);
+                break;
+            case R.id.analytics_filter_two_weeks :
+                dates = CalendarIterator.getLast(Period.TWO_WEEKS);
+                break;
+            case R.id.analytics_filter_month :
+                dates = CalendarIterator.getLast(Period.MOUNTH);
+                break;
+            default:
+                break;
+        }
+
+        for (Date date: dates) {
+            Log.i("RetrofitRequest", Formatter.dateToRestrofit(date));
+            RetrofitClient.getInstance().sendRequestWithDate(rateCallback, Formatter.dateToRestrofit(date), currencyName );
+        }
     }
 }
