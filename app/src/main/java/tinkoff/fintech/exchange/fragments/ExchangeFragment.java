@@ -19,7 +19,7 @@ import tinkoff.fintech.exchange.daoTasks.GetAllCurrencies;
 import tinkoff.fintech.exchange.ExchangeListAdapter;
 import tinkoff.fintech.exchange.R;
 
-
+//TODO: FIXME Incorrect ListView state when download, adapter.notifyDataSetChanged() after init doesn't helps
 public class ExchangeFragment extends ListFragment {
 
     public ExchangeFragment() {}

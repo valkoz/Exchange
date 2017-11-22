@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,9 +83,15 @@ public class ExchangeListAdapter extends ArrayAdapter<Currency> {
                 @Override
                 public void onClick(View view) {
 
-                    Intent intent = new Intent(context, ExchangeActivity.class);
                     String toCurrency = viewHolder.text.getText().toString();
-                    String fromCurrency = tv.getText().toString();
+                    String fromCurrency = currencies.get(0).getName();
+                    if (fromCurrency.equals(toCurrency))
+                        fromCurrency = currencies.get(1).getName();
+                    if (choosenCurrency != null) {
+                        fromCurrency = choosenCurrency.getName();
+                    }
+
+                    Intent intent = new Intent(context, ExchangeActivity.class);
                     intent.putExtra(TO_CURRENCY, toCurrency);
                     intent.putExtra(FROM_CURRENCY, fromCurrency);
                     context.startActivity(intent);
