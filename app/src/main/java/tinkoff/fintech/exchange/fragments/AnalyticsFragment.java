@@ -38,7 +38,7 @@ public class AnalyticsFragment extends ListFragment {
     public enum Period {
         WEEK,
         TWO_WEEKS,
-        MOUNTH
+        MONTH
     }
 
     public AnalyticsFragment() {
@@ -47,8 +47,7 @@ public class AnalyticsFragment extends ListFragment {
 
 
     public static AnalyticsFragment newInstance() {
-        AnalyticsFragment fragment = new AnalyticsFragment();
-        return fragment;
+        return new AnalyticsFragment();
     }
 
     @Override
@@ -61,12 +60,12 @@ public class AnalyticsFragment extends ListFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-         List<String> coins = new ArrayList<>();
-        for (CurrencyName coin: CurrencyName.values()) {
+        List<String> coins = new ArrayList<>();
+        for (CurrencyName coin : CurrencyName.values()) {
             coins.add(coin.name());
         }
 
-        ArrayAdapter<String> adapter  =  new  ArrayAdapter<>(
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 getActivity(), android.R.layout.simple_list_item_1, coins);
         setListAdapter(adapter);
 
@@ -114,23 +113,24 @@ public class AnalyticsFragment extends ListFragment {
 
         String currencyName = ((TextView) v).getText().toString();
         List<Date> dates = new ArrayList<>();
-        switch (radioGroup.getCheckedRadioButtonId()){
-            case R.id.analytics_filter_week :
+        switch (radioGroup.getCheckedRadioButtonId()) {
+            case R.id.analytics_filter_week:
                 dates = CalendarIterator.getLast(Period.WEEK);
                 break;
-            case R.id.analytics_filter_two_weeks :
+            case R.id.analytics_filter_two_weeks:
                 dates = CalendarIterator.getLast(Period.TWO_WEEKS);
                 break;
-            case R.id.analytics_filter_month :
-                dates = CalendarIterator.getLast(Period.MOUNTH);
+            case R.id.analytics_filter_month:
+                dates = CalendarIterator.getLast(Period.MONTH);
                 break;
             default:
                 break;
         }
 
-        for (Date date: dates) {
+        for (Date date : dates) {
             Log.i("RetrofitRequest", Formatter.dateToRestrofit(date));
-            RetrofitClient.getInstance().sendRequestWithDate(rateCallback, Formatter.dateToRestrofit(date), currencyName );
+            RetrofitClient.getInstance().sendRequestWithDate(rateCallback, Formatter.dateToRestrofit(date), currencyName);
         }
+        //TODO: After all data received and added to list - show graph
     }
 }

@@ -21,7 +21,7 @@ public class CalendarIterator {
             case TWO_WEEKS:
                 startCalender.add(Calendar.DAY_OF_YEAR, -13);
                 break;
-            case MOUNTH:
+            case MONTH:
                 startCalender.add(Calendar.DAY_OF_YEAR, -30);
                 break;
             default:

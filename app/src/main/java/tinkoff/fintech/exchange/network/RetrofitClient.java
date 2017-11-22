@@ -1,6 +1,6 @@
 package tinkoff.fintech.exchange.network;
 
-import android.util.Log;
+import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -63,7 +63,7 @@ public class RetrofitClient {
         Call<ApiResponse> responseCall = RetrofitClient.getInstance().getService().latest(from, to);
         responseCall.enqueue(new retrofit2.Callback<ApiResponse>() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+            public void onResponse(@NonNull Call<ApiResponse> call, @NonNull Response<ApiResponse> response) {
                 RateObject rate = response.body().getRates();
                 if (rate != null)
                     callback.onSuccess(rate);
@@ -72,7 +72,7 @@ public class RetrofitClient {
             }
 
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<ApiResponse> call, @NonNull Throwable t) {
                 callback.onError(ErrorType.REQUEST_ERROR);
             }
         });
@@ -82,7 +82,7 @@ public class RetrofitClient {
         Call<ApiResponse> responseCall = RetrofitClient.getInstance().getService().byDate(date, to);
         responseCall.enqueue(new retrofit2.Callback<ApiResponse>() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+            public void onResponse(@NonNull Call<ApiResponse> call, @NonNull Response<ApiResponse> response) {
                 RateObject rate = response.body().getRates();
                 if (rate != null)
                     callback.onSuccess(rate);
@@ -91,7 +91,7 @@ public class RetrofitClient {
             }
 
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<ApiResponse> call, @NonNull Throwable t) {
                 callback.onError(ErrorType.REQUEST_ERROR);
             }
         });

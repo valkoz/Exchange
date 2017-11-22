@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkFirstRun() {
-        
+
         final String PREFS_NAME = "MyPrefsFile";
         final String PREF_VERSION_CODE_KEY = "version_code";
         final int DOESNT_EXIST = -1;
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         } else if (savedVersionCode == DOESNT_EXIST) {
             Log.i("DatabaseInfo", "first run initialization");
-            for (CurrencyName coin: CurrencyName.values()) {
+            for (CurrencyName coin : CurrencyName.values()) {
                 AsyncTask.execute(() -> AppDatabase.getAppDatabase(getApplicationContext()).currencyDao().insertAll(new Currency(coin.name())));
             }
         }

@@ -37,7 +37,7 @@ public class HistoryListAdapter extends ArrayAdapter<ExchangeOperation> {
     @Override
     public View getView(int position, final View convertView, @NonNull ViewGroup parent) {
 
-        View viewItem = null;
+        View viewItem;
         if (convertView == null) {
 
             final LayoutInflater inflator = context.getLayoutInflater();

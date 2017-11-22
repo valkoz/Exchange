@@ -4,13 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.Collections;
@@ -44,7 +42,7 @@ public class ExchangeListAdapter extends ArrayAdapter<Currency> {
     @Override
     public View getView(int position, final View convertView, @NonNull ViewGroup parent) {
 
-        View viewItem = null;
+        View viewItem;
         if (convertView == null) {
 
             final LayoutInflater inflator = context.getLayoutInflater();
@@ -55,80 +53,69 @@ public class ExchangeListAdapter extends ArrayAdapter<Currency> {
             final TextView tv = context.findViewById(R.id.selected_currency);
 
             viewHolder.checkbox
-                    .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    .setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView,
-                                                     boolean isChecked) {
+                        //get clicked item
+                        Currency element = (Currency) viewHolder.checkbox
+                                .getTag();
+                        //set him to favourite
+                        element.setFavourite(buttonView.isChecked());
+                        //update in db
+                        AsyncTask.execute(() -> AppDatabase.getAppDatabase(context).
+                                currencyDao()
+                                .update(element));
 
-                            //get clicked item
-                            Currency element = (Currency) viewHolder.checkbox
-                                    .getTag();
-                            //set him to favourite
-                            element.setFavourite(buttonView.isChecked());
-                            //update in db
-                            AsyncTask.execute(() -> AppDatabase.getAppDatabase(context).
-                                    currencyDao()
-                                    .update(element));
+                        Collections.sort(currencies);
 
-                            Collections.sort(currencies);
+                        notifyDataSetChanged();
 
-                            notifyDataSetChanged();
-
-                        }
                     });
 
             viewHolder.text
-                    .setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                    .setOnClickListener(view -> {
 
-                    String toCurrency = viewHolder.text.getText().toString();
-                    String fromCurrency = currencies.get(0).getName();
-                    if (fromCurrency.equals(toCurrency))
-                        fromCurrency = currencies.get(1).getName();
-                    if (choosenCurrency != null) {
-                        fromCurrency = choosenCurrency.getName();
-                    }
+                        String toCurrency = viewHolder.text.getText().toString();
+                        String fromCurrency = currencies.get(0).getName();
+                        if (fromCurrency.equals(toCurrency))
+                            fromCurrency = currencies.get(1).getName();
+                        if (choosenCurrency != null) {
+                            fromCurrency = choosenCurrency.getName();
+                        }
 
-                    Intent intent = new Intent(context, ExchangeActivity.class);
-                    intent.putExtra(TO_CURRENCY, toCurrency);
-                    intent.putExtra(FROM_CURRENCY, fromCurrency);
-                    context.startActivity(intent);
-                }
-            });
+                        Intent intent = new Intent(context, ExchangeActivity.class);
+                        intent.putExtra(TO_CURRENCY, toCurrency);
+                        intent.putExtra(FROM_CURRENCY, fromCurrency);
+                        context.startActivity(intent);
+                    });
 
             viewHolder.text
-                    .setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
+                    .setOnLongClickListener(view -> {
 
-                    //add to list
-                    if (choosenCurrency != null)
-                        currencies.add(choosenCurrency);
+                        //add to list
+                        if (choosenCurrency != null)
+                            currencies.add(choosenCurrency);
 
-                    //get clicked item
-                    Currency element = (Currency) viewHolder.checkbox
-                            .getTag();
-                    element.increaseUseFrequency();
+                        //get clicked item
+                        Currency element = (Currency) viewHolder.checkbox
+                                .getTag();
+                        element.increaseUseFrequency();
 
-                    //update db
-                    AsyncTask.execute(() -> AppDatabase.getAppDatabase(context)
-                            .currencyDao()
-                            .update(element));
+                        //update db
+                        AsyncTask.execute(() -> AppDatabase.getAppDatabase(context)
+                                .currencyDao()
+                                .update(element));
 
-                    //remove from list
-                    choosenCurrency = element;
-                    currencies.remove(element);
+                        //remove from list
+                        choosenCurrency = element;
+                        currencies.remove(element);
 
-                    Collections.sort(currencies);
+                        Collections.sort(currencies);
 
-                    notifyDataSetChanged();
+                        notifyDataSetChanged();
 
-                    tv.setText(viewHolder.text.getText());
-                    return true;
-                }
-            });
+                        tv.setText(viewHolder.text.getText());
+                        return true;
+                    });
 
             viewItem.setTag(viewHolder);
             viewHolder.checkbox.setTag(currencies.get(position));
