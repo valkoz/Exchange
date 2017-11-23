@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -16,10 +17,18 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import tinkoff.fintech.exchange.AnalyticsResponseBuffer;
 import tinkoff.fintech.exchange.CurrencyName;
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.network.ErrorType;
@@ -29,7 +38,6 @@ import tinkoff.fintech.exchange.network.RateWithDateCallback;
 import tinkoff.fintech.exchange.network.RetrofitClient;
 import tinkoff.fintech.exchange.util.CalendarIterator;
 import tinkoff.fintech.exchange.util.Formatter;
-import tinkoff.fintech.exchange.views.GraphView;
 
 public class AnalyticsFragment extends ListFragment {
 
@@ -70,40 +78,49 @@ public class AnalyticsFragment extends ListFragment {
                 getActivity(), android.R.layout.simple_list_item_1, coins);
         setListAdapter(adapter);
 
+        GraphView graph = getActivity().findViewById(R.id.graph);
+        List<DataPoint> dataPoints = new ArrayList<>();
+
         rateCallback = new RateWithDateCallback() {
             @Override
             public void onSuccess(RateObject rate, Date date) {
-                Toast.makeText(getContext(), rate.getName() + " " + rate.getRate() + " " + Formatter.dateToRestrofit(date), Toast.LENGTH_SHORT).show();
+                Log.i("Retrofit returns", rate.getName() + " " + rate.getRate() + " " + Formatter.dateToRestrofit(date));
+                //Toast.makeText(getContext(), rate.getName() + " " + rate.getRate() + " " + Formatter.dateToRestrofit(date), Toast.LENGTH_SHORT).show();
+                dataPoints.add(new DataPoint(date, rate.getRate()));
+                if (dataPoints.size() == 7) {
+                    Log.i("DataPoints", dataPoints.toString());
+                    DataPoint[] dps = new DataPoint[dataPoints.size()];
+                    Collections.sort(dataPoints, new Comparator<DataPoint>() {
+                        @Override
+                        public int compare(DataPoint dataPoint, DataPoint t1) {
+                            if (dataPoint.getX() > dataPoint.getY())
+                                return 1;
+                            else
+                                return 0;
+                        }
+                    });
+                    dataPoints.toArray(dps);
+                    LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dps);
+                    graph.addSeries(series);
+                    graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+                    graph.getGridLabelRenderer().setNumHorizontalLabels(7);
+                    graph.getViewport().setMinX(69.5);
+                    graph.getViewport().setMaxX(70.5);
+                    graph.getViewport().setXAxisBoundsManual(true);
+                    graph.getGridLabelRenderer().setHumanRounding(false);
+
+                }
                 //TODO: Add Point to graphList as items.add(new Point(rate.getDate(), rate.getRate));
             }
 
             @Override
             public void onError(ErrorType type) {
-                Toast.makeText(getContext(),
+                /*Toast.makeText(getContext(),
                         "Error",
                         Toast.LENGTH_SHORT)
-                        .show();
+                        .show();*/
             }
         };
-
-        List<Point> items = new ArrayList<>();
-        items.add(new Point(1, 63));
-        items.add(new Point(2, 62));
-        items.add(new Point(3, 61));
-        items.add(new Point(4, 62));
-        items.add(new Point(5, 60));
-        items.add(new Point(6, 63));
-        items.add(new Point(7, 63));
-        final GraphView graph = getActivity().findViewById(R.id.graphView);
-        graph.setItems(items);
-
-        Paint p1 = new Paint();
-        p1.setColor(Color.BLUE);
-        p1.setStrokeWidth(5);
-        graph.setPlotPaint(p1);
-
-        graph.setGridStep(20);
-        graph.setLabelStep(5);
 
         radioGroup = getActivity().findViewById(R.id.radioGroup);
 

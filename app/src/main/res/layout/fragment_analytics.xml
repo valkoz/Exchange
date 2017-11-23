@@ -5,14 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="tinkoff.fintech.exchange.fragments.AnalyticsFragment">
 
-    <tinkoff.fintech.exchange.views.GraphView
-        android:id="@+id/graphView"
+    <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dip"
         android:layout_alignParentStart="true"
         android:layout_below="@id/android:list"
         android:layout_gravity="center"
-        android:background="#eee" />
+        android:id="@+id/graph" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
