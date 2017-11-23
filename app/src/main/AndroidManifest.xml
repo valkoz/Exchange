@@ -21,10 +21,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.operation.ExchangeActivity"
+        <activity
+            android:name=".main.operation.ExchangeActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible">
-        </activity>
+            android:windowSoftInputMode="stateVisible" />
+        <activity android:name=".main.history.FilterActivity"></activity>
     </application>
 
 </manifest>

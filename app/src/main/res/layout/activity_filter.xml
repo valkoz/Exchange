@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="tinkoff.fintech.exchange.main.history.FilterActivity">
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:checkedButton="@id/history_filter_all"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+
+        <RadioButton
+            android:id="@+id/history_filter_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:textColor="@color/colorPrimary"
+            android:text="@string/all"/>
+
+        <RadioButton
+            android:id="@+id/history_filter_week"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:textColor="@color/colorPrimary"
+            android:text="@string/week"/>
+
+        <RadioButton
+            android:id="@+id/history_filter_month"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:textColor="@color/colorPrimary"
+            android:text="@string/month"/>
+
+        <RadioButton
+            android:id="@+id/history_filter_custom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:textColor="@color/colorPrimary"
+            android:text="@string/choose_date"/>
+
+    </RadioGroup>
+
+    <CalendarView
+        android:id="@+id/analytics_calendar_from"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/radioGroup">
+    </CalendarView>
+    <CalendarView
+        android:id="@+id/analytics_calendar_to"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/radioGroup">
+    </CalendarView>
+
+</android.support.constraint.ConstraintLayout>
