@@ -6,7 +6,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="center">
+        android:layout_gravity="center_horizontal">
 
         <TextView
             android:id="@+id/first_currency"
@@ -23,11 +23,13 @@
             android:textSize="30sp"
             android:focusedByDefault="true"
             />
-        <Button
-            android:id="@+id/exchange_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CHANGE"/>
+
+       <Button
+           android:id="@+id/exchange_button"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="CHANGE"/>
+
         <TextView
             android:id="@+id/exchange_result_decimal"
             android:layout_width="wrap_content"
@@ -43,5 +45,5 @@
             android:textSize="30sp"
             android:paddingLeft="10sp"
             />
-
 </LinearLayout>
+

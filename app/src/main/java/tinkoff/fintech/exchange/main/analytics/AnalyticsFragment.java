@@ -20,14 +20,18 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
+import tinkoff.fintech.exchange.daoTasks.GetAllCurrencies;
 import tinkoff.fintech.exchange.enums.CurrencyName;
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.enums.Period;
+import tinkoff.fintech.exchange.model.Currency;
 import tinkoff.fintech.exchange.network.ErrorType;
 import tinkoff.fintech.exchange.network.RateObject;
 import tinkoff.fintech.exchange.network.RateWithDateCallback;
 import tinkoff.fintech.exchange.network.RetrofitClient;
+import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.util.CalendarIterator;
 import tinkoff.fintech.exchange.util.Formatter;
 
@@ -61,10 +65,19 @@ public class AnalyticsFragment extends ListFragment {
         initGraphStyle();
 
         List<String> coins = new ArrayList<>();
-        for (CurrencyName coin : CurrencyName.values()) {
-            coins.add(coin.name());
+        List<Currency> currencies;
+        try {
+            currencies = new GetAllCurrencies(AppDatabase.getAppDatabase(getContext())).execute().get();
+            Collections.sort(currencies);
+            for (Currency c: currencies) {
+                coins.add(c.getName());
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
-
+        coins.remove(CurrencyName.EUR.name());
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 getActivity(), android.R.layout.simple_list_item_1, coins);
         setListAdapter(adapter);
@@ -130,6 +143,13 @@ public class AnalyticsFragment extends ListFragment {
         p1.setColor(getResources().getColor(R.color.colorPrimary));
         p1.setStrokeWidth(5);
         graph.setPlotPaint(p1);
+
+        Paint p2 = new Paint();
+        p2.setColor(getResources().getColor(R.color.colorPrimary));
+        p2.setTextSize(24f);
+        p2.setFakeBoldText(true);
+
+        graph.setTextPaint(p2);
         graph.setGridStep(10);
         graph.setLabelStep(5);
         graph.setScaleYLabelDateFormat(true);
