@@ -1,6 +1,7 @@
 package tinkoff.fintech.exchange.util;
 
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -28,5 +29,10 @@ public class Formatter {
     public static String dateToRestrofit(Date date) {
         return  new SimpleDateFormat(
                 "yyyy-MM-dd", Locale.US).format(date);
+    }
+
+    public static Date dateFromRestrofit(String date) throws ParseException {
+        return  new SimpleDateFormat(
+                "yyyy-MM-dd", Locale.US).parse(date);
     }
 }

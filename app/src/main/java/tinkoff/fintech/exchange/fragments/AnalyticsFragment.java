@@ -25,6 +25,7 @@ import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.network.ErrorType;
 import tinkoff.fintech.exchange.network.RateCallback;
 import tinkoff.fintech.exchange.network.RateObject;
+import tinkoff.fintech.exchange.network.RateWithDateCallback;
 import tinkoff.fintech.exchange.network.RetrofitClient;
 import tinkoff.fintech.exchange.util.CalendarIterator;
 import tinkoff.fintech.exchange.util.Formatter;
@@ -33,7 +34,7 @@ import tinkoff.fintech.exchange.views.GraphView;
 public class AnalyticsFragment extends ListFragment {
 
     RadioGroup radioGroup;
-    RateCallback rateCallback;
+    RateWithDateCallback rateCallback;
 
     public enum Period {
         WEEK,
@@ -69,10 +70,10 @@ public class AnalyticsFragment extends ListFragment {
                 getActivity(), android.R.layout.simple_list_item_1, coins);
         setListAdapter(adapter);
 
-        rateCallback = new RateCallback() {
+        rateCallback = new RateWithDateCallback() {
             @Override
-            public void onSuccess(RateObject rate) {
-                Toast.makeText(getContext(), rate.getName() + rate.getRate(), Toast.LENGTH_SHORT).show();
+            public void onSuccess(RateObject rate, Date date) {
+                Toast.makeText(getContext(), rate.getName() + " " + rate.getRate() + " " + Formatter.dateToRestrofit(date), Toast.LENGTH_SHORT).show();
                 //TODO: Add Point to graphList as items.add(new Point(rate.getDate(), rate.getRate));
             }
 

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
@@ -39,7 +40,7 @@ public class RetrofitClient {
                 .addInterceptor(getLoggingInterceptor())
                 .build();
 
-        Gson gson = new GsonBuilder().registerTypeAdapter(RateObject.class, new RatesDeserializer()).create();
+        Gson gson = new GsonBuilder().registerTypeAdapter(RateObject.class, new RatesDeserializer()).setDateFormat("yyyy-MM-dd").create();
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
                 .baseUrl(BASE_URL)
@@ -78,14 +79,15 @@ public class RetrofitClient {
         });
     }
 
-    public void sendRequestWithDate(final RateCallback callback, String date, String to) {
+    public void sendRequestWithDate(final RateWithDateCallback callback, String date, String to) {
         Call<ApiResponse> responseCall = RetrofitClient.getInstance().getService().byDate(date, to);
         responseCall.enqueue(new retrofit2.Callback<ApiResponse>() {
             @Override
             public void onResponse(@NonNull Call<ApiResponse> call, @NonNull Response<ApiResponse> response) {
                 RateObject rate = response.body().getRates();
+                Date date = response.body().getDate();
                 if (rate != null)
-                    callback.onSuccess(rate);
+                    callback.onSuccess(rate, date);
                 else
                     callback.onError(ErrorType.NULL_BODY);
             }
