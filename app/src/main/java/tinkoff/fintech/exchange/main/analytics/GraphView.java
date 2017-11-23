@@ -12,10 +12,6 @@ import java.util.List;
 
 import tinkoff.fintech.exchange.util.Formatter;
 
-//TODO: Enable float values instead of Point
-//TODO: Add dateToLongString postfix and comparison of dates (171101 - as 01 November 2017, 180210 - as 10 February 2018)
-//FIXME: CRASH when creating graph with two similar Points
-
 public class GraphView extends View {
     private int plotColor = Color.RED;
     private float xCords[];
@@ -174,7 +170,7 @@ public class GraphView extends View {
             else {
                 label = String.valueOf((int) (minX + i * (maxX - minX) / (labelStep - 1)));
             }
-            canvas.drawText(label, plotAlignX + canvasWidth * 0.8f * i / (labelStep - 1), 0.95f * canvasHeight, textPaint);
+            canvas.drawText(label, canvasWidth * 0.8f * i / (labelStep - 1), 0.96f * canvasHeight, textPaint);
         }
 
         for (int i = 0; i < labelStep; i++) {
@@ -184,7 +180,7 @@ public class GraphView extends View {
                     plotAlignX,
                     canvasHeight - 1.2f * plotAlignY - canvasHeight * 0.8f * i / (labelStep - 1),
                     axesPaint);
-            canvas.drawText(label, 0, canvasHeight - plotAlignY - canvasHeight * 0.8f * i / (labelStep - 1) - textPaint.getTextSize(), textPaint);
+            canvas.drawText(label, 0, canvasHeight - plotAlignY - canvasHeight * 0.8f * i / (labelStep - 1) - 2 * textPaint.getTextSize() / 3, textPaint);
         }
     }
 

@@ -11,7 +11,7 @@ import android.util.Log;
 
 import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.BuildConfig;
-import tinkoff.fintech.exchange.CurrencyName;
+import tinkoff.fintech.exchange.enums.CurrencyName;
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.main.analytics.AnalyticsFragment;
 import tinkoff.fintech.exchange.main.operation.ExchangeFragment;

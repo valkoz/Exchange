@@ -8,6 +8,7 @@ import java.util.Date;
 import tinkoff.fintech.exchange.util.Formatter;
 
 public class GraphPoint implements Comparable<GraphPoint> {
+
     private float x;
     private float y;
 
@@ -44,16 +45,5 @@ public class GraphPoint implements Comparable<GraphPoint> {
     public String toString() {
         return Formatter.dateToString(new Date((long) x)) + " : " + y;
     }
-/*
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (!(obj instanceof GraphPoint)) return false;
-        GraphPoint other = (GraphPoint) obj;
-        if (this.getX() == other.getX() && this.getY() == other.getY())
-            return true;
-        return false;
-    }
-    */
+
 }

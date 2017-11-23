@@ -21,8 +21,9 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import tinkoff.fintech.exchange.CurrencyName;
+import tinkoff.fintech.exchange.enums.CurrencyName;
 import tinkoff.fintech.exchange.R;
+import tinkoff.fintech.exchange.enums.Period;
 import tinkoff.fintech.exchange.network.ErrorType;
 import tinkoff.fintech.exchange.network.RateObject;
 import tinkoff.fintech.exchange.network.RateWithDateCallback;
@@ -33,18 +34,12 @@ import tinkoff.fintech.exchange.util.Formatter;
 public class AnalyticsFragment extends ListFragment {
 
     RadioGroup radioGroup;
+    GraphView graph;
     RateWithDateCallback rateCallback;
     List<GraphPoint> items = new ArrayList<>();
+    int responseCount = 7;
 
-    public enum Period {
-        WEEK,
-        TWO_WEEKS,
-        MONTH
-    }
-
-    public AnalyticsFragment() {
-        // Required empty public constructor
-    }
+    public AnalyticsFragment() {}
 
 
     public static AnalyticsFragment newInstance() {
@@ -61,6 +56,10 @@ public class AnalyticsFragment extends ListFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        graph = getActivity().findViewById(R.id.graphView);
+        radioGroup = getActivity().findViewById(R.id.radioGroup);
+        initGraphStyle();
+
         List<String> coins = new ArrayList<>();
         for (CurrencyName coin : CurrencyName.values()) {
             coins.add(coin.name());
@@ -70,22 +69,12 @@ public class AnalyticsFragment extends ListFragment {
                 getActivity(), android.R.layout.simple_list_item_1, coins);
         setListAdapter(adapter);
 
-        final GraphView graph = getActivity().findViewById(R.id.graphView);
-
-        Paint p1 = new Paint();
-        p1.setColor(Color.BLUE);
-        p1.setStrokeWidth(5);
-        graph.setPlotPaint(p1);
-        graph.setGridStep(20);
-        graph.setLabelStep(4);
-        graph.setScaleYLabelDateFormat(true);
 
         rateCallback = new RateWithDateCallback() {
             @Override
             public void onSuccess(RateObject rate, Date date) {
                 items.add(new GraphPoint(date, rate.getRate()));
-                if (items.size() == 7) {
-                    //List<GraphPoint> withoutDuplicates = new ArrayList<>(new HashSet<GraphPoint>(items));
+                if (items.size() == responseCount) {
                     Collections.sort(items, new Comparator<GraphPoint>() {
                         @Override
                         public int compare(GraphPoint graphPoint, GraphPoint t1) {
@@ -97,19 +86,13 @@ public class AnalyticsFragment extends ListFragment {
                     graph.invalidate();
                     items.clear();
                 }
-                //TODO: Add Point to graphList as items.add(new Point(rate.getDate(), rate.getRate));
             }
 
             @Override
             public void onError(ErrorType type) {
-                Toast.makeText(getContext(),
-                        "Error",
-                        Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
             }
         };
-
-        radioGroup = getActivity().findViewById(R.id.radioGroup);
 
     }
 
@@ -121,12 +104,15 @@ public class AnalyticsFragment extends ListFragment {
         switch (radioGroup.getCheckedRadioButtonId()) {
             case R.id.analytics_filter_week:
                 dates = CalendarIterator.getLast(Period.WEEK);
+                responseCount = dates.size();
                 break;
             case R.id.analytics_filter_two_weeks:
                 dates = CalendarIterator.getLast(Period.TWO_WEEKS);
+                responseCount = dates.size();
                 break;
             case R.id.analytics_filter_month:
                 dates = CalendarIterator.getLast(Period.MONTH);
+                responseCount = dates.size();
                 break;
             default:
                 break;
@@ -134,8 +120,18 @@ public class AnalyticsFragment extends ListFragment {
 
         for (Date date : dates) {
             items.clear();
-            RetrofitClient.getInstance().sendRequestWithDate(rateCallback, Formatter.dateToString(date), currencyName);
+            RetrofitClient.getInstance()
+                    .sendRequestWithDate(rateCallback, Formatter.dateToString(date), currencyName);
         }
-        //TODO: After all data received and added to list - show graph
+    }
+
+    private void initGraphStyle() {
+        Paint p1 = new Paint();
+        p1.setColor(getResources().getColor(R.color.colorPrimary));
+        p1.setStrokeWidth(5);
+        graph.setPlotPaint(p1);
+        graph.setGridStep(10);
+        graph.setLabelStep(5);
+        graph.setScaleYLabelDateFormat(true);
     }
 }

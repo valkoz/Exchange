@@ -1,4 +1,4 @@
-package tinkoff.fintech.exchange;
+package tinkoff.fintech.exchange.enums;
 
 public enum CurrencyName {
 

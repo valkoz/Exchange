@@ -5,11 +5,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import tinkoff.fintech.exchange.enums.Period;
 import tinkoff.fintech.exchange.main.analytics.AnalyticsFragment;
 
 public class CalendarIterator {
 
-    public static List<Date> getLast(AnalyticsFragment.Period period) {
+    public static List<Date> getLast(Period period) {
 
         Calendar startCalender = Calendar.getInstance();
         Calendar endCalendar = Calendar.getInstance();
@@ -30,7 +31,10 @@ public class CalendarIterator {
 
         List<Date> dates = new ArrayList<>();
 
-        for (Date date = startCalender.getTime(); startCalender.before(endCalendar); startCalender.add(Calendar.DATE, 1), date = startCalender.getTime()) {
+        for (Date date = startCalender.getTime();
+             startCalender.before(endCalendar);
+             startCalender.add(Calendar.DATE, 1),
+                     date = startCalender.getTime()) {
             dates.add(date);
         }
         return dates;

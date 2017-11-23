@@ -3,4 +3,7 @@
     <string name="title_history">History</string>
     <string name="title_exchange">Exchange</string>
     <string name="title_analytics">Analytics</string>
+    <string name="week">7 days</string>
+    <string name="two_weeks">14 days</string>
+    <string name="month">30 days</string>
 </resources>
