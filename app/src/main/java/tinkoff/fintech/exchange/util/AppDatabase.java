@@ -1,4 +1,4 @@
-package tinkoff.fintech.exchange;
+package tinkoff.fintech.exchange.util;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;

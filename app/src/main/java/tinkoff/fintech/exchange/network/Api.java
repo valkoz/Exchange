@@ -13,9 +13,9 @@ public interface Api {
             @Query("symbols") String to
     );
 
-    @GET("{date}") //format: 2000-01-03
+    @GET("{dateToLongString}") //format: 2000-01-03
     Call<ApiResponse> byDate(
-            @Path("date") String date,
+            @Path("dateToLongString") String date,
             @Query("symbols") String to
     );
 }

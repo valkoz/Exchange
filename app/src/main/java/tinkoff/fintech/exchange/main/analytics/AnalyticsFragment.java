@@ -1,8 +1,7 @@
-package tinkoff.fintech.exchange.fragments;
+package tinkoff.fintech.exchange.main.analytics;
 
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
@@ -17,24 +16,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 import tinkoff.fintech.exchange.CurrencyName;
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.network.ErrorType;
-import tinkoff.fintech.exchange.network.RateCallback;
 import tinkoff.fintech.exchange.network.RateObject;
 import tinkoff.fintech.exchange.network.RateWithDateCallback;
 import tinkoff.fintech.exchange.network.RetrofitClient;
 import tinkoff.fintech.exchange.util.CalendarIterator;
 import tinkoff.fintech.exchange.util.Formatter;
-import tinkoff.fintech.exchange.views.GraphView;
 
 public class AnalyticsFragment extends ListFragment {
 
     RadioGroup radioGroup;
     RateWithDateCallback rateCallback;
+    List<GraphPoint> items = new ArrayList<>();
 
     public enum Period {
         WEEK,
@@ -70,10 +70,33 @@ public class AnalyticsFragment extends ListFragment {
                 getActivity(), android.R.layout.simple_list_item_1, coins);
         setListAdapter(adapter);
 
+        final GraphView graph = getActivity().findViewById(R.id.graphView);
+
+        Paint p1 = new Paint();
+        p1.setColor(Color.BLUE);
+        p1.setStrokeWidth(5);
+        graph.setPlotPaint(p1);
+        graph.setGridStep(20);
+        graph.setLabelStep(4);
+        graph.setScaleYLabelDateFormat(true);
+
         rateCallback = new RateWithDateCallback() {
             @Override
             public void onSuccess(RateObject rate, Date date) {
-                Toast.makeText(getContext(), rate.getName() + " " + rate.getRate() + " " + Formatter.dateToRestrofit(date), Toast.LENGTH_SHORT).show();
+                items.add(new GraphPoint(date, rate.getRate()));
+                if (items.size() == 7) {
+                    //List<GraphPoint> withoutDuplicates = new ArrayList<>(new HashSet<GraphPoint>(items));
+                    Collections.sort(items, new Comparator<GraphPoint>() {
+                        @Override
+                        public int compare(GraphPoint graphPoint, GraphPoint t1) {
+                            return  Float.compare(graphPoint.getX(), t1.getX());
+                        }
+                    });
+                    Log.i("Collection Items", items.toString());
+                    graph.setItems(items);
+                    graph.invalidate();
+                    items.clear();
+                }
                 //TODO: Add Point to graphList as items.add(new Point(rate.getDate(), rate.getRate));
             }
 
@@ -85,25 +108,6 @@ public class AnalyticsFragment extends ListFragment {
                         .show();
             }
         };
-
-        List<Point> items = new ArrayList<>();
-        items.add(new Point(1, 63));
-        items.add(new Point(2, 62));
-        items.add(new Point(3, 61));
-        items.add(new Point(4, 62));
-        items.add(new Point(5, 60));
-        items.add(new Point(6, 63));
-        items.add(new Point(7, 63));
-        final GraphView graph = getActivity().findViewById(R.id.graphView);
-        graph.setItems(items);
-
-        Paint p1 = new Paint();
-        p1.setColor(Color.BLUE);
-        p1.setStrokeWidth(5);
-        graph.setPlotPaint(p1);
-
-        graph.setGridStep(20);
-        graph.setLabelStep(5);
 
         radioGroup = getActivity().findViewById(R.id.radioGroup);
 
@@ -129,8 +133,8 @@ public class AnalyticsFragment extends ListFragment {
         }
 
         for (Date date : dates) {
-            Log.i("RetrofitRequest", Formatter.dateToRestrofit(date));
-            RetrofitClient.getInstance().sendRequestWithDate(rateCallback, Formatter.dateToRestrofit(date), currencyName);
+            items.clear();
+            RetrofitClient.getInstance().sendRequestWithDate(rateCallback, Formatter.dateToString(date), currencyName);
         }
         //TODO: After all data received and added to list - show graph
     }

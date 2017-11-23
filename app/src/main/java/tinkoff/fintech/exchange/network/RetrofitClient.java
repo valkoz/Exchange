@@ -84,12 +84,16 @@ public class RetrofitClient {
         responseCall.enqueue(new retrofit2.Callback<ApiResponse>() {
             @Override
             public void onResponse(@NonNull Call<ApiResponse> call, @NonNull Response<ApiResponse> response) {
-                RateObject rate = response.body().getRates();
-                Date date = response.body().getDate();
-                if (rate != null)
-                    callback.onSuccess(rate, date);
-                else
-                    callback.onError(ErrorType.NULL_BODY);
+                if (response != null) {
+                    if (response.body() != null) {
+                        RateObject rate = response.body().getRates();
+                        Date date = response.body().getDate();
+                        if (rate != null)
+                            callback.onSuccess(rate, date);
+                        else
+                            callback.onError(ErrorType.NULL_BODY);
+                    }
+                }
             }
 
             @Override

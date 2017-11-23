@@ -1,6 +1,6 @@
 package tinkoff.fintech.exchange.network;
 
-//TODO: Add Date date for Analytics
+//TODO: Add Date dateToLongString for Analytics
 public class RateObject {
     private String name;
     private double rate;

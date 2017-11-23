@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import tinkoff.fintech.exchange.fragments.AnalyticsFragment;
+import tinkoff.fintech.exchange.main.analytics.AnalyticsFragment;
 
 public class CalendarIterator {
 

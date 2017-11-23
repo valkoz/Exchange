@@ -1,4 +1,4 @@
-package tinkoff.fintech.exchange.fragments;
+package tinkoff.fintech.exchange.main.operation;
 
 
 import android.os.Bundle;
@@ -14,10 +14,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import tinkoff.fintech.exchange.AppDatabase;
+import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.model.Currency;
 import tinkoff.fintech.exchange.daoTasks.GetAllCurrencies;
-import tinkoff.fintech.exchange.ExchangeListAdapter;
 import tinkoff.fintech.exchange.R;
 
 public class ExchangeFragment extends ListFragment {

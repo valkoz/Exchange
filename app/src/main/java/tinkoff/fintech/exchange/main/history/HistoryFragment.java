@@ -1,4 +1,4 @@
-package tinkoff.fintech.exchange.fragments;
+package tinkoff.fintech.exchange.main.history;
 
 
 import android.os.Bundle;
@@ -12,8 +12,7 @@ import android.widget.ArrayAdapter;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import tinkoff.fintech.exchange.AppDatabase;
-import tinkoff.fintech.exchange.HistoryListAdapter;
+import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.daoTasks.GetAllOperationHistory;
 import tinkoff.fintech.exchange.model.ExchangeOperation;

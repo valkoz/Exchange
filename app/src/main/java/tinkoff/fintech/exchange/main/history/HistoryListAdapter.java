@@ -1,4 +1,4 @@
-package tinkoff.fintech.exchange;
+package tinkoff.fintech.exchange.main.history;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.model.ExchangeOperation;
 import tinkoff.fintech.exchange.util.Formatter;
 
@@ -56,12 +57,12 @@ public class HistoryListAdapter extends ArrayAdapter<ExchangeOperation> {
         }
         HistoryListAdapter.ViewHolder holder = (HistoryListAdapter.ViewHolder) viewItem.getTag();
 
-        holder.datetime.setText(Formatter.date(history.get(position).getCreatedDateTime()));
+        holder.datetime.setText(Formatter.dateToLongString(history.get(position).getCreatedDateTime()));
         holder.from.setText(history.get(position).getFrom());
         holder.to.setText(history.get(position).getTo());
 
-        holder.fromValue.setText(Formatter.decimal(history.get(position).getFromValue()));
-        holder.toValue.setText(Formatter.decimal(history.get(position).getToValue()));
+        holder.fromValue.setText(Formatter.doubleToString(history.get(position).getFromValue()));
+        holder.toValue.setText(Formatter.doubleToString(history.get(position).getToValue()));
 
         return viewItem;
     }

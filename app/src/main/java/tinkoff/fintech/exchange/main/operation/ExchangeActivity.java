@@ -1,4 +1,4 @@
-package tinkoff.fintech.exchange.activities;
+package tinkoff.fintech.exchange.main.operation;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -15,7 +15,8 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Objects;
 
-import tinkoff.fintech.exchange.AppDatabase;
+import tinkoff.fintech.exchange.main.MainActivity;
+import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.model.ExchangeOperation;
 import tinkoff.fintech.exchange.network.ErrorType;
@@ -63,7 +64,7 @@ public class ExchangeActivity extends AppCompatActivity {
                         else {
                             double mul = Double.parseDouble(value);
                             double result = rate.getRate() * mul;
-                            tv.setText(Formatter.decimal(result));
+                            tv.setText(Formatter.doubleToString(result));
                         }
                     }
 

@@ -1,17 +1,19 @@
-package tinkoff.fintech.exchange.views;
+package tinkoff.fintech.exchange.main.analytics;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.util.Date;
 import java.util.List;
 
+import tinkoff.fintech.exchange.util.Formatter;
+
 //TODO: Enable float values instead of Point
-//TODO: Add date postfix and comparison of dates (171101 - as 01 November 2017, 180210 - as 10 February 2018)
+//TODO: Add dateToLongString postfix and comparison of dates (171101 - as 01 November 2017, 180210 - as 10 February 2018)
 //FIXME: CRASH when creating graph with two similar Points
 
 public class GraphView extends View {
@@ -28,6 +30,7 @@ public class GraphView extends View {
 
     private String xLabel;
     private String yLabel;
+    private boolean isYScaleFormatDate;
 
     private float canvasWidth;
     private float canvasHeight;
@@ -51,17 +54,17 @@ public class GraphView extends View {
         init(attrs, defStyle);
     }
 
-    public void setItems(List<Point> items) {
+    public void setItems(List<GraphPoint> items) {
         xCords = new float[items.size() * 2 - 2];
         yCords = new float[items.size() * 2 - 2];
         int i = 0;
-        for (Point item : items) {
-            xCords[i] = item.x;
-            yCords[i] = item.y;
+        for (GraphPoint item : items) {
+            xCords[i] = item.getX();
+            yCords[i] = item.getY();
             i++;
             if (items.indexOf(item) != 0 && items.indexOf(item) != items.size() - 1) {
-                xCords[i] = item.x;
-                yCords[i] = item.y;
+                xCords[i] = item.getX();
+                yCords[i] = item.getY();
                 i++;
             }
         }
@@ -85,6 +88,7 @@ public class GraphView extends View {
     }
 
     private void init(AttributeSet attrs, int defStyle) {
+        isYScaleFormatDate = false;
         plotPaint = new Paint();
         plotPaint.setColor(plotColor);
         plotPaint.setStrokeWidth(3.0f);
@@ -119,17 +123,20 @@ public class GraphView extends View {
     }
 
     private void drawPlot(Canvas canvas) {
-        float plotAlignX = 1.2f * canvasWidth / 10;
-        float plotAlignY = 1.2f * canvasHeight / 10;
-        float xLength = (maxX - minX) / (canvasWidth * 0.8f);
-        float yLength = (maxY - minY) / (canvasHeight * 0.8f);
+        if (xCords!= null) {
+            float plotAlignX = 1.2f * canvasWidth / 10;
+            float plotAlignY = 1.2f * canvasHeight / 10;
+            float xLength = (maxX - minX) / (canvasWidth * 0.8f);
+            float yLength = (maxY - minY) / (canvasHeight * 0.8f);
 
-        for (int i = 0; i < xCords.length - 1; i++) {
-            canvas.drawLine((xCords[i] - minX) / xLength + plotAlignX,
-                    canvasHeight - (yCords[i] - minY) / yLength - plotAlignY,
-                    (xCords[i + 1] - minX) / xLength + plotAlignX,
-                    canvasHeight - (yCords[i + 1] - minY) / yLength - plotAlignY,
-                    plotPaint);
+            for (int i = 0; i < xCords.length - 1; i++) {
+                canvas.drawLine(
+                        (xCords[i] - minX) / xLength + plotAlignX,
+                        canvasHeight - (yCords[i] - minY) / yLength - plotAlignY,
+                        (xCords[i + 1] - minX) / xLength + plotAlignX,
+                        canvasHeight - (yCords[i + 1] - minY) / yLength - plotAlignY,
+                        plotPaint);
+            }
         }
     }
 
@@ -160,18 +167,24 @@ public class GraphView extends View {
                     1.2f * plotAlignX + canvasWidth * 0.8f * i / (labelStep - 1),
                     canvasHeight - plotAlignY + 10,
                     axesPaint);
-            String label = String.valueOf((int) (minX + i * (maxX - minX) / (labelStep - 1)));
+            String label;
+            if (isYScaleFormatDate) {
+                label = Formatter.dateToShortString(new Date((long) (minX + i * (maxX - minX) / (labelStep - 1))));
+            }
+            else {
+                label = String.valueOf((int) (minX + i * (maxX - minX) / (labelStep - 1)));
+            }
             canvas.drawText(label, plotAlignX + canvasWidth * 0.8f * i / (labelStep - 1), 0.95f * canvasHeight, textPaint);
         }
 
         for (int i = 0; i < labelStep; i++) {
-            String label = String.valueOf((int) (minY + i * (maxY - minY) / (labelStep - 1)));
+            String label = Formatter.doubleToString( minY + i * (maxY - minY) / (labelStep - 1));
             canvas.drawLine(plotAlignX - 10,
                     canvasHeight - 1.2f * plotAlignY - canvasHeight * 0.8f * i / (labelStep - 1),
                     plotAlignX,
                     canvasHeight - 1.2f * plotAlignY - canvasHeight * 0.8f * i / (labelStep - 1),
                     axesPaint);
-            canvas.drawText(label, 0, canvasHeight - plotAlignY - canvasHeight * 0.8f * i / (labelStep - 1), textPaint);
+            canvas.drawText(label, 0, canvasHeight - plotAlignY - canvasHeight * 0.8f * i / (labelStep - 1) - textPaint.getTextSize(), textPaint);
         }
     }
 
@@ -204,6 +217,10 @@ public class GraphView extends View {
     public void setPlotColor(int color) {
         plotColor = color;
         plotPaint.setColor(color);
+    }
+
+    public void setScaleYLabelDateFormat(boolean b) {
+        isYScaleFormatDate = b;
     }
 
     public void setPlotPaint(Paint p) {

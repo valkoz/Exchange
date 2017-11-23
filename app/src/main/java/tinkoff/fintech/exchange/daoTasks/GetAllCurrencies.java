@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import java.util.List;
 
-import tinkoff.fintech.exchange.AppDatabase;
+import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.model.Currency;
 
 

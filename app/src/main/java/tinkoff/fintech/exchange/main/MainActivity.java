@@ -1,4 +1,4 @@
-package tinkoff.fintech.exchange.activities;
+package tinkoff.fintech.exchange.main;
 
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -9,13 +9,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import tinkoff.fintech.exchange.AppDatabase;
+import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.BuildConfig;
 import tinkoff.fintech.exchange.CurrencyName;
 import tinkoff.fintech.exchange.R;
-import tinkoff.fintech.exchange.fragments.AnalyticsFragment;
-import tinkoff.fintech.exchange.fragments.ExchangeFragment;
-import tinkoff.fintech.exchange.fragments.HistoryFragment;
+import tinkoff.fintech.exchange.main.analytics.AnalyticsFragment;
+import tinkoff.fintech.exchange.main.operation.ExchangeFragment;
+import tinkoff.fintech.exchange.main.history.HistoryFragment;
 import tinkoff.fintech.exchange.model.Currency;
 
 public class MainActivity extends AppCompatActivity {

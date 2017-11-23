@@ -1,4 +1,4 @@
-package tinkoff.fintech.exchange;
+package tinkoff.fintech.exchange.main.operation;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,11 +14,12 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.List;
 
-import tinkoff.fintech.exchange.activities.ExchangeActivity;
+import tinkoff.fintech.exchange.util.AppDatabase;
+import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.model.Currency;
 
-import static tinkoff.fintech.exchange.activities.MainActivity.FROM_CURRENCY;
-import static tinkoff.fintech.exchange.activities.MainActivity.TO_CURRENCY;
+import static tinkoff.fintech.exchange.main.MainActivity.FROM_CURRENCY;
+import static tinkoff.fintech.exchange.main.MainActivity.TO_CURRENCY;
 
 
 public class ExchangeListAdapter extends ArrayAdapter<Currency> {
