@@ -67,20 +67,7 @@ public class AnalyticsFragment extends ListFragment {
         radioGroup = getActivity().findViewById(R.id.radioGroup);
         initGraphStyle();
 
-        List<String> coins = new ArrayList<>();
-        List<Currency> currencies;
-        try {
-            currencies = new GetAllCurrencies(AppDatabase.getAppDatabase(getContext())).execute().get();
-            Collections.sort(currencies);
-            for (Currency c: currencies) {
-                coins.add(c.getName());
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        coins.remove(CurrencyName.EUR.name());
+        List<String> coins = AppDatabase.getAppDatabase(getContext()).currencyDao().getCurrencyNamesExcept(CurrencyName.EUR.name());
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 getActivity(), android.R.layout.simple_list_item_1, coins);
         setListAdapter(adapter);
