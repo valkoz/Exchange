@@ -76,8 +76,8 @@ public class FilterListAdapter extends ArrayAdapter<String> {
         return viewItem;
     }
 
-    public List<String> getChoosenCurrencies() {
-        return choosenCurrencies;
+    public ArrayList<String> getChoosenCurrencies() {
+        return new ArrayList<>(choosenCurrencies);
     }
 
 }

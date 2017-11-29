@@ -140,7 +140,7 @@ public class FilterActivity extends AppCompatActivity {
                 if (fromDate.getTime() < toDate.getTime()) {
                     returnIntent.putExtra("from", fromDate.getTime());
                     returnIntent.putExtra("to", toDate.getTime());
-                    returnIntent.putExtra("currencies", adapter.getChoosenCurrencies().toString());
+                    returnIntent.putExtra("currencies", adapter.getChoosenCurrencies());
                     setResult(1, returnIntent);
                     finish();
                 }

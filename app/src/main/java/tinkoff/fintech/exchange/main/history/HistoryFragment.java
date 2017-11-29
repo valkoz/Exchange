@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -65,8 +66,20 @@ public class HistoryFragment extends ListFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == REQUEST_CODE) {
+            ArrayList<String> names = data.getExtras().getStringArrayList("currencies");
+            long fromDate = data.getExtras().getLong("from");
+            long toDate = data.getExtras().getLong("to");
 
-        Toast.makeText(getContext(),data.getExtras().getLong("from")
-                + data.getExtras().getLong("to") + data.getExtras().getString("currencies"), Toast.LENGTH_SHORT).show();
+            ArrayAdapter<ExchangeOperation> adapter = null;
+            if (names.isEmpty()) {
+                adapter = new HistoryListAdapter(getActivity(),
+                        AppDatabase.getAppDatabase(getContext()).exchangeOperationDao().getByDate(fromDate, toDate));
+            } else {
+                adapter = new HistoryListAdapter(getActivity(),
+                        AppDatabase.getAppDatabase(getContext()).exchangeOperationDao().getByDateAndName(names, fromDate, toDate));
+            }
+            setListAdapter(adapter);
+        }
     }
 }
