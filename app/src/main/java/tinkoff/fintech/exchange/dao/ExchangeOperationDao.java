@@ -16,6 +16,9 @@ public interface ExchangeOperationDao {
     @Query("SELECT * FROM ExchangeOperation")
     List<ExchangeOperation> getAll();
 
+    @Query("SELECT `from` FROM exchangeoperation GROUP BY `from` UNION SELECT `to` FROM exchangeoperation GROUP BY `to`")
+    List<String> getExistingCurrencies();
+
     @Insert
     void insertAll(ExchangeOperation... exchangeHistories);
 

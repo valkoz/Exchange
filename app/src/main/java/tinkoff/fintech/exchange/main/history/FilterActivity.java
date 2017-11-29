@@ -1,21 +1,34 @@
 package tinkoff.fintech.exchange.main.history;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import tinkoff.fintech.exchange.R;
+import tinkoff.fintech.exchange.main.operation.ExchangeListAdapter;
+import tinkoff.fintech.exchange.model.Currency;
+import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.util.CalendarIterator;
 import tinkoff.fintech.exchange.util.Formatter;
 
@@ -31,6 +44,7 @@ public class FilterActivity extends AppCompatActivity {
     DatePickerDialog dpd;
     Button submitButton;
     RadioGroup rg;
+    ListView lv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +56,13 @@ public class FilterActivity extends AppCompatActivity {
         edTo = findViewById(R.id.history_filer_to);
         submitButton = findViewById(R.id.history_filter_submit);
         rg = findViewById(R.id.history_radioGroup);
+
+        lv = findViewById(R.id.history_filter_list);
+
+        List coins = AppDatabase.getAppDatabase(getApplicationContext()).exchangeOperationDao().getExistingCurrencies();
+
+        FilterListAdapter adapter = new FilterListAdapter(this, coins);
+        lv.setAdapter(adapter);
 
         updateDates(Calendar.YEAR);
 
@@ -115,15 +136,18 @@ public class FilterActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (fromDate.getTime() < toDate.getTime())
-                    Toast.makeText(getApplicationContext(),
-                            Formatter.dateToString(fromDate)
-                                    + Formatter.dateToString(toDate),
-                            Toast.LENGTH_SHORT).show();
+                Intent returnIntent = new Intent();
+                if (fromDate.getTime() < toDate.getTime()) {
+                    returnIntent.putExtra("from", fromDate.getTime());
+                    returnIntent.putExtra("to", toDate.getTime());
+                    returnIntent.putExtra("currencies", adapter.getChoosenCurrencies().toString());
+                    setResult(1, returnIntent);
+                    finish();
+                }
                 else {
                     Toast.makeText(getApplicationContext(), "Error:" +
                             Formatter.dateToString(fromDate)
-                                    + Formatter.dateToString(toDate),
+                                    + Formatter.dateToString(toDate) + lv.getCheckedItemPosition(),
                             Toast.LENGTH_SHORT).show();
                 }
             }

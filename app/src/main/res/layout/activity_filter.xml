@@ -79,11 +79,18 @@
             android:inputType="date"/>
     </LinearLayout>
 
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:id="@+id/history_filter_list"
+        android:layout_below="@id/datePicker">
+    </ListView>
+
     <Button
         android:id="@+id/history_filter_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/datePicker"
+        android:layout_below="@id/history_filter_list"
         android:text="submit"
         android:layout_centerHorizontal="true"/>
 

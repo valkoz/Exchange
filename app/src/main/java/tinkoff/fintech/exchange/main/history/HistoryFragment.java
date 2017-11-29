@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -21,6 +22,7 @@ import tinkoff.fintech.exchange.model.ExchangeOperation;
 
 public class HistoryFragment extends ListFragment {
 
+    final int REQUEST_CODE = 1;
 
     public HistoryFragment() {
     }
@@ -33,7 +35,7 @@ public class HistoryFragment extends ListFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext(), FilterActivity.class));
+                startActivityForResult(new Intent(getContext(), FilterActivity.class), REQUEST_CODE);
             }
         });
 
@@ -61,4 +63,10 @@ public class HistoryFragment extends ListFragment {
         return inflater.inflate(R.layout.fragment_history, container, false);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Toast.makeText(getContext(),data.getExtras().getLong("from")
+                + data.getExtras().getLong("to") + data.getExtras().getString("currencies"), Toast.LENGTH_SHORT).show();
+    }
 }
