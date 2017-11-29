@@ -40,4 +40,10 @@ public class CalendarIterator {
         return dates;
     }
 
+    public static Date get(int period) {
+        Calendar endCalendar = Calendar.getInstance();
+        endCalendar.add(period, -1);
+        return endCalendar.getTime();
+    }
+
 }

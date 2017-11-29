@@ -25,7 +25,9 @@
             android:name=".main.operation.ExchangeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible" />
-        <activity android:name=".main.history.FilterActivity"></activity>
+        <activity
+            android:name=".main.history.FilterActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 
 </manifest>
