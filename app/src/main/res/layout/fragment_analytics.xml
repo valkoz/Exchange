@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".main.analytics.AnalyticsFragment">
 
-    <tinkoff.fintech.exchange.main.analytics.GraphView
+    <com.tinkoff.fintech.news.simpleplot.GraphView
         android:id="@+id/graphView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -15,6 +15,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tinkoff.fintech.news.simpleplot.GraphPoint;
+import com.tinkoff.fintech.news.simpleplot.GraphView;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;

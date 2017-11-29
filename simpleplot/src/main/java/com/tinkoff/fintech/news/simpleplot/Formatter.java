@@ -1,4 +1,4 @@
-package tinkoff.fintech.exchange.util;
+package com.tinkoff.fintech.news.simpleplot;
 
 
 import java.text.ParseException;
@@ -23,14 +23,14 @@ public class Formatter {
             return String.format(Locale.US, "%.4f", result);
     }
 
-    public static String dateToLongString(Date date) {
-        return  new SimpleDateFormat(
-                "dd MMM ''yy 'at' HH:mm", Locale.US).format(date);
-    }
-
     public static String dateToString(Date date) {
         return  new SimpleDateFormat(
                 "yyyy-MM-dd", Locale.US).format(date);
+    }
+
+    public static String dateToShortString(Date date) {
+        return  new SimpleDateFormat(
+                "dd MMM", Locale.US).format(date);
     }
     
 }

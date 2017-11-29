@@ -1,11 +1,9 @@
-package tinkoff.fintech.exchange.main.analytics;
+package com.tinkoff.fintech.news.simpleplot;
 
 
 import android.support.annotation.NonNull;
 
 import java.util.Date;
-
-import tinkoff.fintech.exchange.util.Formatter;
 
 public class GraphPoint implements Comparable<GraphPoint> {
 

@@ -1,4 +1,4 @@
-package tinkoff.fintech.exchange.main.analytics;
+package com.tinkoff.fintech.news.simpleplot;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,8 +9,6 @@ import android.view.View;
 
 import java.util.Date;
 import java.util.List;
-
-import tinkoff.fintech.exchange.util.Formatter;
 
 public class GraphView extends View {
     private int plotColor = Color.RED;
