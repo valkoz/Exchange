@@ -49,20 +49,23 @@ public class GraphView extends View {
     }
 
     public void setItems(List<GraphPoint> items) {
-        xCords = new float[items.size() * 2 - 2];
-        yCords = new float[items.size() * 2 - 2];
-        int i = 0;
-        for (GraphPoint item : items) {
-            xCords[i] = item.getX();
-            yCords[i] = item.getY();
-            i++;
-            if (items.indexOf(item) != 0 && items.indexOf(item) != items.size() - 1) {
+        if (!items.isEmpty()) {
+            xCords = new float[items.size() * 2 - 2];
+            yCords = new float[items.size() * 2 - 2];
+            int i = 0;
+            for (GraphPoint item : items) {
                 xCords[i] = item.getX();
                 yCords[i] = item.getY();
                 i++;
+                if (items.indexOf(item) != 0 && items.indexOf(item) != items.size() - 1) {
+                    xCords[i] = item.getX();
+                    yCords[i] = item.getY();
+                    i++;
+                }
             }
+            findMinMax();
+            invalidate();
         }
-        findMinMax();
     }
 
     private void findMinMax() {
