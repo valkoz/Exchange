@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -62,6 +63,7 @@ public class FilterActivity extends AppCompatActivity {
             toDate = i.getToDate();
             edFrom.setText(Formatter.dateToString(fromDate));
             edTo.setText(Formatter.dateToString(toDate));
+            Log.i("toAdapter", i.getCurrencies().toString());
             adapter = new FilterListAdapter(this, coins, i.getCurrencies());
         } else {
             updateDates(Calendar.YEAR);

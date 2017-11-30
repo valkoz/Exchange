@@ -2,6 +2,7 @@ package tinkoff.fintech.exchange.main.history;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +20,13 @@ public class FilterListAdapter extends ArrayAdapter<String> {
 
     private final Activity context;
     private List<String> currencies;
-    private List<String> choosenCurrencies = new ArrayList<>();
-    private List<String> checkedState;
+    private List<String> choosenCurrencies;
 
     public FilterListAdapter(Activity context, List<String> list, List<String> checkedState) {
         super(context, R.layout.item_list, list);
         this.context = context;
         this.currencies = list;
-        this.checkedState = checkedState;
+        this.choosenCurrencies = checkedState;
     }
 
     static class ViewHolder {
@@ -47,6 +47,12 @@ public class FilterListAdapter extends ArrayAdapter<String> {
             viewHolder.text = viewItem.findViewById(R.id.label);
             viewHolder.checkbox = viewItem.findViewById(R.id.check);
 
+            for (String cur: choosenCurrencies) {
+                if (cur.equals(currencies.get(position))) {
+                    viewHolder.checkbox.setChecked(true);
+                }
+            }
+
             viewHolder.checkbox
                     .setOnCheckedChangeListener((buttonView, isChecked) -> {
                         if (isChecked)
@@ -64,17 +70,11 @@ public class FilterListAdapter extends ArrayAdapter<String> {
         FilterListAdapter.ViewHolder holder = (FilterListAdapter.ViewHolder) viewItem.getTag();
         holder.text.setText(currencies.get(position));
 
-        for (String cur: checkedState) {
-            if (cur.equals(holder.text.getText().toString())) {
-                holder.checkbox.setChecked(true);
-                break;
-            }
-        }
-
         return viewItem;
     }
 
     public ArrayList<String> getChoosenCurrencies() {
+        Log.i("fromAdapter", choosenCurrencies.toString());
         return new ArrayList<>(choosenCurrencies);
     }
 
