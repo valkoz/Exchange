@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 import tinkoff.fintech.exchange.enums.Period;
-import tinkoff.fintech.exchange.main.analytics.AnalyticsFragment;
 
 public class CalendarIterator {
 

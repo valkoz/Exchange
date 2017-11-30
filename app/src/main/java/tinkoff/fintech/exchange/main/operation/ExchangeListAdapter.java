@@ -14,9 +14,9 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.List;
 
-import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.model.Currency;
+import tinkoff.fintech.exchange.util.AppDatabase;
 
 import static tinkoff.fintech.exchange.main.MainActivity.FROM_CURRENCY;
 import static tinkoff.fintech.exchange.main.MainActivity.TO_CURRENCY;

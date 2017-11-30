@@ -9,14 +9,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.BuildConfig;
-import tinkoff.fintech.exchange.enums.CurrencyName;
 import tinkoff.fintech.exchange.R;
+import tinkoff.fintech.exchange.enums.CurrencyName;
 import tinkoff.fintech.exchange.main.analytics.AnalyticsFragment;
-import tinkoff.fintech.exchange.main.operation.ExchangeFragment;
 import tinkoff.fintech.exchange.main.history.HistoryFragment;
+import tinkoff.fintech.exchange.main.operation.ExchangeFragment;
 import tinkoff.fintech.exchange.model.Currency;
+import tinkoff.fintech.exchange.util.AppDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
