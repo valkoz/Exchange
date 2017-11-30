@@ -39,6 +39,8 @@ public class ExchangeListAdapter extends ArrayAdapter<Currency> {
         protected CheckBox checkbox;
     }
 
+    //TODO move logic to ViewModel -> call model methods from here. Init model in constructor
+
     @NonNull
     @Override
     public View getView(int position, final View convertView, @NonNull ViewGroup parent) {

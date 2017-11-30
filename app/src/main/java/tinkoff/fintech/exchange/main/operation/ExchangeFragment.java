@@ -1,6 +1,7 @@
 package tinkoff.fintech.exchange.main.operation;
 
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
@@ -21,6 +22,9 @@ import tinkoff.fintech.exchange.R;
 
 public class ExchangeFragment extends ListFragment {
 
+    ExchangeViewModel model;
+    ArrayAdapter<Currency> adapter;
+
     public ExchangeFragment() {}
 
     public static ExchangeFragment newInstance() {
@@ -31,25 +35,17 @@ public class ExchangeFragment extends ListFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ArrayAdapter<Currency> adapter = null;
-        try {
-            List<Currency> currencies = getModel();
-            Collections.sort(currencies);
+        model = ViewModelProviders.of(this).get(ExchangeViewModel.class);
+        model.getCurrencies().observe(this, currencies -> {
             adapter = new ExchangeListAdapter(getActivity(), currencies);
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        setListAdapter(adapter);
-    }
+            setListAdapter(adapter);
+        });
 
-    private List<Currency> getModel() throws ExecutionException, InterruptedException {
-        return new GetAllCurrencies(AppDatabase.getAppDatabase(getContext())).execute().get();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.i("fragmentCreated", getClass().getCanonicalName());
         return inflater.inflate(R.layout.fragment_exchange, container, false);
     }
 
