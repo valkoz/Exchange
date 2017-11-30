@@ -1,11 +1,9 @@
 package tinkoff.fintech.exchange.main.history;
 
-import android.app.Activity;
-import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
@@ -15,47 +13,42 @@ import tinkoff.fintech.exchange.model.ExchangeOperation;
 import tinkoff.fintech.exchange.util.Formatter;
 
 
-public class HistoryListAdapter extends ArrayAdapter<ExchangeOperation> {
+public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.ViewHolder> {
 
-    private final Activity context;
     private List<ExchangeOperation> history;
 
-    public HistoryListAdapter(Activity context, List<ExchangeOperation> list) {
-        super(context, R.layout.item_list, list);
-        this.context = context;
-        this.history = list;
-    }
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView datetime;
+        public TextView from;
+        public TextView to;
+        public TextView fromValue;
+        public TextView toValue;
 
-    static class ViewHolder {
-        protected TextView datetime;
-        protected TextView from;
-        protected TextView to;
-        protected TextView fromValue;
-        protected TextView toValue;
-    }
-
-    @NonNull
-    @Override
-    public View getView(int position, final View convertView, @NonNull ViewGroup parent) {
-
-        View viewItem;
-        if (convertView == null) {
-
-            final LayoutInflater inflator = context.getLayoutInflater();
-            viewItem = inflator.inflate(R.layout.item_history_list, null);
-            final HistoryListAdapter.ViewHolder viewHolder = new HistoryListAdapter.ViewHolder();
-            viewHolder.datetime = viewItem.findViewById(R.id.history_datetime);
-            viewHolder.from = viewItem.findViewById(R.id.history_from);
-            viewHolder.to = viewItem.findViewById(R.id.history_to);
-            viewHolder.fromValue = viewItem.findViewById(R.id.history_from_value);
-            viewHolder.toValue = viewItem.findViewById(R.id.history_to_value);
-
-            viewItem.setTag(viewHolder);
-
-        } else {
-            viewItem = convertView;
+        public ViewHolder(View v) {
+            super(v);
+            datetime = v.findViewById(R.id.history_datetime);
+            from = v.findViewById(R.id.history_from);
+            to = v.findViewById(R.id.history_to);
+            fromValue = v.findViewById(R.id.history_from_value);
+            toValue = v.findViewById(R.id.history_to_value);
         }
-        HistoryListAdapter.ViewHolder holder = (HistoryListAdapter.ViewHolder) viewItem.getTag();
+
+    }
+
+    public HistoryListAdapter(List<ExchangeOperation> list) {
+        history = list;
+    }
+
+    @Override
+    public HistoryListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_history_list, parent, false);
+        ViewHolder vh = new ViewHolder(v);
+        return vh;
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
 
         holder.datetime.setText(Formatter.dateToLongString(history.get(position).getCreatedDateTime()));
         holder.from.setText(history.get(position).getFrom());
@@ -63,8 +56,16 @@ public class HistoryListAdapter extends ArrayAdapter<ExchangeOperation> {
 
         holder.fromValue.setText(Formatter.doubleToString(history.get(position).getFromValue()));
         holder.toValue.setText(Formatter.doubleToString(history.get(position).getToValue()));
+    }
 
-        return viewItem;
+    @Override
+    public int getItemCount() {
+        return history.size();
+    }
+
+    public void addAll(List<ExchangeOperation> newsObjects) {
+        history = newsObjects;
+        notifyDataSetChanged();
     }
 
 }

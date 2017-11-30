@@ -1,57 +1,31 @@
 package tinkoff.fintech.exchange.main.history;
 
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
-import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.model.ExchangeOperation;
 
-public class HistoryFragment extends ListFragment {
+public class HistoryFragment extends Fragment {
 
-    final int REQUEST_CODE = 1;
+    private final int REQUEST_CODE = 1;
+    private HistoryViewModel model;
+    private RecyclerView mRecyclerView;
+    private HistoryListAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
-    public HistoryFragment() {
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(new Intent(getContext(), FilterActivity.class), REQUEST_CODE);
-            }
-        });
-
-        ArrayAdapter<ExchangeOperation> adapter = null;
-        try {
-            adapter = new HistoryListAdapter(getActivity(), getModel());
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        setListAdapter(adapter);
-    }
-
-    private List<ExchangeOperation> getModel() throws ExecutionException, InterruptedException {
-        return AppDatabase.getAppDatabase(getContext()).exchangeOperationDao().getAll();
-    }
-
+    public HistoryFragment() { }
 
     public static HistoryFragment newInstance() {
         return new HistoryFragment();
@@ -60,7 +34,24 @@ public class HistoryFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_history, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_history, container, false);
+
+        mRecyclerView = view.findViewById(R.id.history_list_recycler);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new HistoryListAdapter(new ArrayList<ExchangeOperation>());
+        mRecyclerView.setAdapter(mAdapter);
+
+
+        model = ViewModelProviders.of(this).get(HistoryViewModel.class);
+        model.getCurrencies().observe(this, exchangeOperations -> mAdapter.addAll(exchangeOperations));
+
+        FloatingActionButton fab = view.findViewById(R.id.fab);
+        fab.setOnClickListener((View v) -> {startActivityForResult(new Intent(getContext(), FilterActivity.class), REQUEST_CODE);});
+
+        return view;
     }
 
     @Override
@@ -69,16 +60,7 @@ public class HistoryFragment extends ListFragment {
             ArrayList<String> names = data.getExtras().getStringArrayList("currencies");
             long fromDate = data.getExtras().getLong("from");
             long toDate = data.getExtras().getLong("to");
-
-            ArrayAdapter<ExchangeOperation> adapter = null;
-            if (names.isEmpty()) {
-                adapter = new HistoryListAdapter(getActivity(),
-                        AppDatabase.getAppDatabase(getContext()).exchangeOperationDao().getByDate(fromDate, toDate));
-            } else {
-                adapter = new HistoryListAdapter(getActivity(),
-                        AppDatabase.getAppDatabase(getContext()).exchangeOperationDao().getByDateAndName(names, fromDate, toDate));
-            }
-            setListAdapter(adapter);
+            model.getByDateAndName(names, fromDate, toDate);
         }
     }
 }
