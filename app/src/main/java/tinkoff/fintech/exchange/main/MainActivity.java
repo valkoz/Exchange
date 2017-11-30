@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //FIXME do it before ExchangeViewModel created. (First run bug)
     private void checkFirstRun() {
 
         final String PREFS_NAME = "MyPrefsFile";

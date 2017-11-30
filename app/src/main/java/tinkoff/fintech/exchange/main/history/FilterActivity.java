@@ -17,12 +17,13 @@ import java.util.Date;
 import java.util.List;
 
 import tinkoff.fintech.exchange.R;
+import tinkoff.fintech.exchange.model.HistoryQuery;
 import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.util.CalendarIterator;
 import tinkoff.fintech.exchange.util.Formatter;
 
 
-//TODO Add list, refactor to ViewModel.
+//TODO loadState from ViewModel
 public class FilterActivity extends AppCompatActivity {
 
     Calendar calendar;
@@ -131,6 +132,8 @@ public class FilterActivity extends AppCompatActivity {
                     returnIntent.putExtra("to", toDate.getTime());
                     returnIntent.putExtra("currencies", adapter.getChoosenCurrencies());
                     setResult(1, returnIntent);
+                    AppDatabase.getAppDatabase(getApplicationContext()).historyQueryDao().deleteAll();
+                    AppDatabase.getAppDatabase(getApplicationContext()).historyQueryDao().insert(new HistoryQuery(fromDate, toDate, adapter.getChoosenCurrencies()));
                     finish();
                 }
                 else {

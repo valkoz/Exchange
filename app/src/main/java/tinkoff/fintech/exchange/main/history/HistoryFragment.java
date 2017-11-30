@@ -60,7 +60,7 @@ public class HistoryFragment extends Fragment {
             ArrayList<String> names = data.getExtras().getStringArrayList("currencies");
             long fromDate = data.getExtras().getLong("from");
             long toDate = data.getExtras().getLong("to");
-            model.getByDateAndName(names, fromDate, toDate);
+            model.get(names, fromDate, toDate);
         }
     }
 }
