@@ -15,7 +15,7 @@ import java.util.List;
 
 import tinkoff.fintech.exchange.R;
 
-
+//TODO upgrade to RecyclerView
 public class FilterListAdapter extends ArrayAdapter<String> {
 
     private final Activity context;

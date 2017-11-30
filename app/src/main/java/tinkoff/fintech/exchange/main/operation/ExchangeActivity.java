@@ -24,7 +24,7 @@ import tinkoff.fintech.exchange.network.RateObject;
 import tinkoff.fintech.exchange.network.RetrofitClient;
 import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.util.Formatter;
-
+//TODO Refactor
 public class ExchangeActivity extends AppCompatActivity {
 
     @Override

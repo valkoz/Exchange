@@ -14,7 +14,7 @@ import java.util.List;
 import tinkoff.fintech.exchange.model.ExchangeOperation;
 import tinkoff.fintech.exchange.model.HistoryQuery;
 import tinkoff.fintech.exchange.util.AppDatabase;
-
+//TODO Refactor(simplify logic)
 public class HistoryViewModel extends AndroidViewModel {
 
     MutableLiveData<List<ExchangeOperation>> operations;
