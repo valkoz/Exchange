@@ -18,7 +18,6 @@ import java.util.concurrent.ExecutionException;
 
 import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.R;
-import tinkoff.fintech.exchange.daoTasks.GetAllOperationHistory;
 import tinkoff.fintech.exchange.model.ExchangeOperation;
 
 public class HistoryFragment extends ListFragment {
@@ -50,7 +49,7 @@ public class HistoryFragment extends ListFragment {
     }
 
     private List<ExchangeOperation> getModel() throws ExecutionException, InterruptedException {
-        return new GetAllOperationHistory(AppDatabase.getAppDatabase(getContext())).execute().get();
+        return AppDatabase.getAppDatabase(getContext()).exchangeOperationDao().getAll();
     }
 
 

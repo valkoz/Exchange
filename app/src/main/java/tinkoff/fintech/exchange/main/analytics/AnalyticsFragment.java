@@ -1,13 +1,10 @@
 package tinkoff.fintech.exchange.main.analytics;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,30 +12,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.tinkoff.fintech.news.simpleplot.GraphPoint;
 import com.tinkoff.fintech.news.simpleplot.GraphView;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
-import tinkoff.fintech.exchange.daoTasks.GetAllCurrencies;
-import tinkoff.fintech.exchange.enums.CurrencyName;
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.enums.Period;
-import tinkoff.fintech.exchange.model.Currency;
-import tinkoff.fintech.exchange.network.ErrorType;
-import tinkoff.fintech.exchange.network.RateObject;
-import tinkoff.fintech.exchange.network.RateWithDateCallback;
-import tinkoff.fintech.exchange.network.RetrofitClient;
-import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.util.CalendarIterator;
-import tinkoff.fintech.exchange.util.Formatter;
 
 public class AnalyticsFragment extends ListFragment {
 

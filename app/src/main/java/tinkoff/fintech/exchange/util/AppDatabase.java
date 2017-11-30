@@ -19,6 +19,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract ExchangeOperationDao exchangeOperationDao();
 
+    //TODO disable MainThreadQueries later
     public static AppDatabase getAppDatabase(Context context) {
         if (INSTANCE == null) {
             INSTANCE =
