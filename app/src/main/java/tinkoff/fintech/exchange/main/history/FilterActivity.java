@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +24,7 @@ import tinkoff.fintech.exchange.util.CalendarIterator;
 import tinkoff.fintech.exchange.util.Formatter;
 
 
-//TODO loadState from ViewModel
+//TODO Refactor
 public class FilterActivity extends AppCompatActivity {
 
     Calendar calendar;
@@ -35,6 +36,7 @@ public class FilterActivity extends AppCompatActivity {
     Button submitButton;
     RadioGroup rg;
     ListView lv;
+    FilterListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +53,20 @@ public class FilterActivity extends AppCompatActivity {
 
         List coins = AppDatabase.getAppDatabase(getApplicationContext()).exchangeOperationDao().getExistingCurrencies();
 
-        FilterListAdapter adapter = new FilterListAdapter(this, coins);
-        lv.setAdapter(adapter);
+        adapter = new FilterListAdapter(this, coins, new ArrayList<String>());
 
-        updateDates(Calendar.YEAR);
+        HistoryQuery i = AppDatabase.getAppDatabase(getApplicationContext()).historyQueryDao().get();
+
+        if (i != null) {
+            fromDate = i.getFromDate();
+            toDate = i.getToDate();
+            edFrom.setText(Formatter.dateToString(fromDate));
+            edTo.setText(Formatter.dateToString(toDate));
+            adapter = new FilterListAdapter(this, coins, i.getCurrencies());
+        } else {
+            updateDates(Calendar.YEAR);
+        }
+        lv.setAdapter(adapter);
 
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

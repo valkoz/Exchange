@@ -20,11 +20,13 @@ public class FilterListAdapter extends ArrayAdapter<String> {
     private final Activity context;
     private List<String> currencies;
     private List<String> choosenCurrencies = new ArrayList<>();
+    private List<String> checkedState;
 
-    public FilterListAdapter(Activity context, List<String> list) {
+    public FilterListAdapter(Activity context, List<String> list, List<String> checkedState) {
         super(context, R.layout.item_list, list);
         this.context = context;
         this.currencies = list;
+        this.checkedState = checkedState;
     }
 
     static class ViewHolder {
@@ -61,6 +63,13 @@ public class FilterListAdapter extends ArrayAdapter<String> {
         }
         FilterListAdapter.ViewHolder holder = (FilterListAdapter.ViewHolder) viewItem.getTag();
         holder.text.setText(currencies.get(position));
+
+        for (String cur: checkedState) {
+            if (cur.equals(holder.text.getText().toString())) {
+                holder.checkbox.setChecked(true);
+                break;
+            }
+        }
 
         return viewItem;
     }
