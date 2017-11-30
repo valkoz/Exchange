@@ -33,5 +33,4 @@ public class ExchangeViewModel extends AndroidViewModel {
         return list;
     }
 
-
 }
