@@ -8,4 +8,5 @@
     <string name="month">30 days</string>
     <string name="all">all</string>
     <string name="no_filter">no Filter</string>
+    <string name="one">1</string>
 </resources>

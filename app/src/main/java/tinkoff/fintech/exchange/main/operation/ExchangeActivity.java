@@ -27,14 +27,17 @@ import tinkoff.fintech.exchange.util.Formatter;
 //TODO Refactor
 public class ExchangeActivity extends AppCompatActivity {
 
+    TextView tv;
+    EditText ed;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i("activityCreated", getClass().getCanonicalName());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exchange);
 
-        TextView tv = findViewById(R.id.exchange_result_decimal);
-        EditText ed = findViewById(R.id.exchange_input_decimal);
+        tv = findViewById(R.id.exchange_result_decimal);
+        ed = findViewById(R.id.exchange_input_decimal);
         Button button = findViewById(R.id.exchange_button);
 
         Intent intent = getIntent();
@@ -51,6 +54,8 @@ public class ExchangeActivity extends AppCompatActivity {
             @Override
             public void onSuccess(RateObject rate) {
 
+                ed.setSelection(ed.getText().length());
+                modifyOutcome(rate);
                 ed.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -58,14 +63,10 @@ public class ExchangeActivity extends AppCompatActivity {
 
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        String value = ed.getText().toString();
-                        if (Objects.equals(value, ""))
+                        if(Objects.equals(ed.getText().toString(), ""))
                             tv.setText("");
-                        else {
-                            double mul = Double.parseDouble(value);
-                            double result = rate.getRate() * mul;
-                            tv.setText(Formatter.doubleToString(result));
-                        }
+                        else
+                            modifyOutcome(rate);
                     }
 
                     @Override
@@ -120,5 +121,12 @@ public class ExchangeActivity extends AppCompatActivity {
 
         RetrofitClient.sendRequest(rateCallback, from, to);
 
+    }
+
+    private void modifyOutcome(RateObject rate) {
+        String value = ed.getText().toString();
+        double mul = Double.parseDouble(value);
+        double result = rate.getRate() * mul;
+        tv.setText(Formatter.doubleToString(result));
     }
 }
