@@ -58,8 +58,7 @@ public class MainActivity extends AppCompatActivity {
         navigation.getMenu().getItem(1).setChecked(true);
 
     }
-
-    //FIXME do it before ExchangeViewModel created. (First run bug)
+    
     private void checkFirstRun() {
 
         final String PREFS_NAME = "MyPrefsFile";
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (savedVersionCode == DOESNT_EXIST) {
             Log.i("DatabaseInfo", "first run initialization");
             for (CurrencyName coin : CurrencyName.values()) {
-                AsyncTask.execute(() -> AppDatabase.getAppDatabase(getApplicationContext()).currencyDao().insertAll(new Currency(coin.name())));
+                AppDatabase.getAppDatabase(getApplicationContext()).currencyDao().insertAll(new Currency(coin.name()));
             }
         }
 
