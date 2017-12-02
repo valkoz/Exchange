@@ -1,10 +1,20 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".main.history.HistoryFragment">
 
+    <TextView
+        android:id="@+id/history_chosen_filter_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="kekekekek"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/history_chosen_filter_info">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/history_list_recycler"
         android:scrollbars="vertical"
@@ -18,5 +28,5 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_dialer" />
-
-</FrameLayout>
+    </FrameLayout>
+</RelativeLayout>

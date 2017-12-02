@@ -33,7 +33,7 @@ public class FilterViewModel extends AndroidViewModel {
             mStartDate.postValue(i.getFromDate());
             mEndDate.postValue(i.getToDate());
         } else {
-            updateDates(Calendar.YEAR);
+            updateDates(Calendar.DAY_OF_YEAR);
         }
     }
 

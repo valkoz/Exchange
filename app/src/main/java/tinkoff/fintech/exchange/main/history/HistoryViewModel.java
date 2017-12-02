@@ -18,23 +18,34 @@ import tinkoff.fintech.exchange.util.AppDatabase;
 public class HistoryViewModel extends AndroidViewModel {
 
     MutableLiveData<List<ExchangeOperation>> operations;
+    MutableLiveData<HistoryQuery> lastQuery;
 
     public HistoryViewModel(@NonNull Application application) {
         super(application);
         operations = new MutableLiveData<List<ExchangeOperation>>();
+        lastQuery = new MutableLiveData<HistoryQuery>();
         getFromBd();
     }
 
-    public LiveData<List<ExchangeOperation>> getCurrencies() {
+    public LiveData<List<ExchangeOperation>> getOperations() {
         return operations;
     }
 
-    private void getFromBd() {
-        HistoryQuery hq = AppDatabase.getAppDatabase(getApplication()).historyQueryDao().get();
+    public LiveData<HistoryQuery> getLastQuery() {
+        return lastQuery;
+    }
 
-        if (hq != null) {
-            Log.i(getClass().getCanonicalName(), hq.getCurrencies().toString() + hq.getFromDate() + hq.getToDate());
-            operations.postValue(getByDateAndName(hq.getCurrencies(), hq.getFromDate().getTime(), hq.getToDate().getTime()));
+    private void getFromBd() {
+        lastQuery.postValue(AppDatabase.getAppDatabase(getApplication()).historyQueryDao().get());
+
+        if (lastQuery.getValue() != null) {
+            Log.i(getClass().getCanonicalName(),
+                    lastQuery.getValue().getCurrencies().toString()
+                            + lastQuery.getValue().getFromDate()
+                            + lastQuery.getValue().getToDate());
+            operations.postValue(getByDateAndName(lastQuery.getValue().getCurrencies(),
+                    lastQuery.getValue().getFromDate().getTime(),
+                    lastQuery.getValue().getToDate().getTime()));
             return;
         }
         Log.i(getClass().getCanonicalName(), "is NULL");
@@ -51,5 +62,6 @@ public class HistoryViewModel extends AndroidViewModel {
 
     public void get(ArrayList<String> names, long fromDate, long toDate) {
         operations.postValue(getByDateAndName(names, fromDate, toDate));
+        lastQuery.postValue(AppDatabase.getAppDatabase(getApplication()).historyQueryDao().get());
     }
 }

@@ -11,15 +11,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.model.ExchangeOperation;
+import tinkoff.fintech.exchange.model.HistoryQuery;
+import tinkoff.fintech.exchange.util.AppDatabase;
+import tinkoff.fintech.exchange.util.Formatter;
 
 public class HistoryFragment extends Fragment {
 
     private final int REQUEST_CODE = 1;
+    private TextView currentFilterTextView;
     private HistoryViewModel model;
     private RecyclerView mRecyclerView;
     private HistoryListAdapter mAdapter;
@@ -37,6 +43,7 @@ public class HistoryFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
+        currentFilterTextView = view.findViewById(R.id.history_chosen_filter_info);
         mRecyclerView = view.findViewById(R.id.history_list_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -46,7 +53,14 @@ public class HistoryFragment extends Fragment {
 
 
         model = ViewModelProviders.of(this).get(HistoryViewModel.class);
-        model.getCurrencies().observe(this, exchangeOperations -> mAdapter.addAll(exchangeOperations));
+        model.getOperations().observe(this, exchangeOperations -> mAdapter.addAll(exchangeOperations));
+        model.getLastQuery().observe(this, historyQuery -> {
+            String lastFilter = "From: " + Formatter.dateToString(historyQuery.getFromDate()) + "\n" +
+                    "To: " + Formatter.dateToString(historyQuery.getToDate()) + "\n" +
+                    "With: " + historyQuery.getCurrencies().toString();
+            currentFilterTextView.setText(lastFilter);
+        });
+
 
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener((View v) -> {startActivityForResult(new Intent(getContext(), FilterActivity.class), REQUEST_CODE);});
