@@ -26,7 +26,6 @@ import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.util.Formatter;
 
 
-//TODO Refactor
 public class FilterActivity extends AppCompatActivity {
 
     Calendar calendar;
@@ -66,7 +65,7 @@ public class FilterActivity extends AppCompatActivity {
         if (i != null) {
             mAdapter.setChoosenCurrencies(i.getCurrencies());
         }
-        
+
         model.getEndDate().observe(this, date -> edTo.setText(Formatter.dateToString(date)));
         model.getStartDate().observe(this, date -> edFrom.setText(Formatter.dateToString(date)));
 

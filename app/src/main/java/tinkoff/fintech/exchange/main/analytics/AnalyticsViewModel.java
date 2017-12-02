@@ -49,7 +49,6 @@ public class AnalyticsViewModel extends AndroidViewModel {
         return graphPoints;
     }
 
-    //TODO simplify
     public void loadGraph(List<Date> dates, String currencyName) {
 
         List<GraphPoint> items = new ArrayList<>();

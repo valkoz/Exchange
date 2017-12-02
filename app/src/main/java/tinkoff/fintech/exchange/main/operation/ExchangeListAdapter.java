@@ -21,7 +21,6 @@ import tinkoff.fintech.exchange.util.AppDatabase;
 import static tinkoff.fintech.exchange.main.MainActivity.FROM_CURRENCY;
 import static tinkoff.fintech.exchange.main.MainActivity.TO_CURRENCY;
 
-//TODO upgrade to RecyclerView
 public class ExchangeListAdapter extends ArrayAdapter<Currency> {
 
     private final Activity context;
