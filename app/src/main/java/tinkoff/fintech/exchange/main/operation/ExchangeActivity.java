@@ -1,5 +1,6 @@
 package tinkoff.fintech.exchange.main.operation;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import java.util.Objects;
 
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.main.MainActivity;
+import tinkoff.fintech.exchange.main.history.FilterViewModel;
 import tinkoff.fintech.exchange.model.ExchangeOperation;
 import tinkoff.fintech.exchange.network.ErrorType;
 import tinkoff.fintech.exchange.network.RateCallback;
@@ -33,7 +35,6 @@ public class ExchangeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i("activityCreated", getClass().getCanonicalName());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exchange);
 
@@ -90,13 +91,14 @@ public class ExchangeActivity extends AppCompatActivity {
                         double mul = Double.parseDouble(value);
                         if (mul > 0) {
                             double result = rate.getRate() * mul;
+                            AsyncTask.execute(()->AppDatabase.getAppDatabase(getApplicationContext()).currencyDao().incrementUseFrequency(from, to));
                             ExchangeOperation operation = new ExchangeOperation(
                                     Calendar.getInstance().getTime(), from, to, mul, result);
-                            AsyncTask.execute(
-                                    () -> AppDatabase
-                                            .getAppDatabase(getApplicationContext())
-                                            .exchangeOperationDao()
-                                            .insertAll(operation));
+
+                            AsyncTask.execute(() -> AppDatabase
+                                                .getAppDatabase(getApplicationContext())
+                                                .exchangeOperationDao()
+                                                .insertAll(operation));
                             finish();
                         } else {
                             Toast.makeText(getBaseContext(),

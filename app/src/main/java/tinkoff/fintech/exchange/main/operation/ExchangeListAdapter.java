@@ -103,10 +103,6 @@ public class ExchangeListAdapter extends ArrayAdapter<Currency> {
                         //get clicked item
                         Currency element = (Currency) viewHolder.checkbox
                                 .getTag();
-                        element.increaseUseFrequency();
-
-                        //update db
-                        updateDb(element);
 
                         //remove from list
                         choosenCurrency = element;

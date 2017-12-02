@@ -14,12 +14,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.model.ExchangeOperation;
-import tinkoff.fintech.exchange.model.HistoryQuery;
-import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.util.Formatter;
 
 public class HistoryFragment extends Fragment {

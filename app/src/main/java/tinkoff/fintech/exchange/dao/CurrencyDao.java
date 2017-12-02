@@ -28,5 +28,8 @@ public interface CurrencyDao {
     @Delete
     void delete(Currency currency);
 
+    @Query("UPDATE currency SET useFrequency = useFrequency + 1 WHERE name IN(:currencies) ")
+    void incrementUseFrequency(String... currencies);
+
 
 }
