@@ -4,12 +4,13 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -36,8 +37,10 @@ public class FilterActivity extends AppCompatActivity {
     DatePickerDialog dpd;
     Button submitButton;
     RadioGroup rg;
-    ListView lv;
-    FilterListAdapter adapter;
+    private RecyclerView mRecyclerView;
+    private FilterRecyclerAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +53,14 @@ public class FilterActivity extends AppCompatActivity {
         submitButton = findViewById(R.id.history_filter_submit);
         rg = findViewById(R.id.history_radioGroup);
 
-        lv = findViewById(R.id.history_filter_list);
-
         List coins = AppDatabase.getAppDatabase(getApplicationContext()).exchangeOperationDao().getExistingCurrencies();
 
-        adapter = new FilterListAdapter(this, coins, new ArrayList<String>());
+        mRecyclerView = findViewById(R.id.filter_list_recycler);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new FilterRecyclerAdapter(coins, new ArrayList<String>());
+        mRecyclerView.setAdapter(mAdapter);
 
         HistoryQuery i = AppDatabase.getAppDatabase(getApplicationContext()).historyQueryDao().get();
 
@@ -64,11 +70,11 @@ public class FilterActivity extends AppCompatActivity {
             edFrom.setText(Formatter.dateToString(fromDate));
             edTo.setText(Formatter.dateToString(toDate));
             Log.i("toAdapter", i.getCurrencies().toString());
-            adapter = new FilterListAdapter(this, coins, i.getCurrencies());
+            mAdapter = new FilterRecyclerAdapter(coins, i.getCurrencies());
         } else {
             updateDates(Calendar.YEAR);
         }
-        lv.setAdapter(adapter);
+        mRecyclerView.setAdapter(mAdapter);
 
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -144,16 +150,16 @@ public class FilterActivity extends AppCompatActivity {
                 if (fromDate.getTime() < toDate.getTime()) {
                     returnIntent.putExtra("from", fromDate.getTime());
                     returnIntent.putExtra("to", toDate.getTime());
-                    returnIntent.putExtra("currencies", adapter.getChoosenCurrencies());
+                    returnIntent.putExtra("currencies", mAdapter.getChoosenCurrencies());
                     setResult(1, returnIntent);
                     AppDatabase.getAppDatabase(getApplicationContext()).historyQueryDao().deleteAll();
-                    AppDatabase.getAppDatabase(getApplicationContext()).historyQueryDao().insert(new HistoryQuery(fromDate, toDate, adapter.getChoosenCurrencies()));
+                    AppDatabase.getAppDatabase(getApplicationContext()).historyQueryDao().insert(new HistoryQuery(fromDate, toDate, mAdapter.getChoosenCurrencies()));
                     finish();
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Error:" +
                             Formatter.dateToString(fromDate)
-                                    + Formatter.dateToString(toDate) + lv.getCheckedItemPosition(),
+                                    + Formatter.dateToString(toDate),
                             Toast.LENGTH_SHORT).show();
                 }
             }
