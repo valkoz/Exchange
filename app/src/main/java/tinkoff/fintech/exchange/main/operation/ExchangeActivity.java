@@ -27,8 +27,9 @@ import tinkoff.fintech.exchange.util.Formatter;
 //TODO Refactor
 public class ExchangeActivity extends AppCompatActivity {
 
-    TextView tv;
-    EditText ed;
+    private TextView tv;
+    private EditText ed;
+    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,9 @@ public class ExchangeActivity extends AppCompatActivity {
 
         tv = findViewById(R.id.exchange_result_decimal);
         ed = findViewById(R.id.exchange_input_decimal);
-        Button button = findViewById(R.id.exchange_button);
+        button = findViewById(R.id.exchange_button);
+
+        button.setEnabled(false);
 
         Intent intent = getIntent();
 
@@ -74,6 +77,7 @@ public class ExchangeActivity extends AppCompatActivity {
                     }
                 });
 
+                button.setEnabled(true);
                 button.setOnClickListener(view -> {
 
                     String value = ed.getText().toString();
