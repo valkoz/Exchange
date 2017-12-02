@@ -74,4 +74,8 @@ public class FilterRecyclerAdapter extends RecyclerView.Adapter<FilterRecyclerAd
         return new ArrayList<>(mChoosenCurrencies);
     }
 
+    public void setChoosenCurrencies(List<String> currencies) {
+        mChoosenCurrencies = currencies;
+    }
+
 }
