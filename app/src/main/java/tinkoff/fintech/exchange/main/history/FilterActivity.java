@@ -97,6 +97,9 @@ public class FilterActivity extends AppCompatActivity {
                 calendar.set(Calendar.YEAR, year);
                 calendar.set(Calendar.MONTH, monthOfYear);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                calendar.set(Calendar.HOUR, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
                 model.setStartDate(calendar);
             }
 
@@ -110,6 +113,9 @@ public class FilterActivity extends AppCompatActivity {
                 calendar.set(Calendar.YEAR, year);
                 calendar.set(Calendar.MONTH, monthOfYear);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                calendar.set(Calendar.HOUR, 24);
+                calendar.set(Calendar.MINUTE, 60);
+                calendar.set(Calendar.SECOND, 60);
                 model.setEndDate(calendar);
             }
 
