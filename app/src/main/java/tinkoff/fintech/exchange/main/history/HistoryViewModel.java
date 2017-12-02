@@ -36,7 +36,7 @@ public class HistoryViewModel extends AndroidViewModel {
     }
 
     private void getFromBd() {
-        lastQuery.postValue(AppDatabase.getAppDatabase(getApplication()).historyQueryDao().get());
+        lastQuery.setValue(AppDatabase.getAppDatabase(getApplication()).historyQueryDao().get());
 
         if (lastQuery.getValue() != null) {
             Log.i(getClass().getCanonicalName(),
