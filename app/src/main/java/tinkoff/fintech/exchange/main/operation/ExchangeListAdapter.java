@@ -90,7 +90,7 @@ public class ExchangeListAdapter extends ArrayAdapter<Currency> {
                         Intent intent = new Intent(context, ExchangeActivity.class);
                         intent.putExtra(TO_CURRENCY, toCurrency);
                         intent.putExtra(FROM_CURRENCY, fromCurrency);
-                        context.startActivity(intent);
+                        context.startActivityForResult(intent,2);
                     });
 
             viewHolder.text
