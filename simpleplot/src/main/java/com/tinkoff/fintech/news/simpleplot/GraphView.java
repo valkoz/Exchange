@@ -21,7 +21,9 @@ public class GraphView extends View {
     private Paint axesPaint;
     private Paint textPaint;
     private Paint gridPaint;
+    private Paint headingPaint;
 
+    private String graphName;
     private String xLabel;
     private String yLabel;
     private boolean isYScaleFormatDate;
@@ -89,17 +91,25 @@ public class GraphView extends View {
         plotPaint = new Paint();
         plotPaint.setColor(plotColor);
         plotPaint.setStrokeWidth(3.0f);
+
         axesPaint = new Paint();
         axesPaint.setColor(Color.BLACK);
         axesPaint.setStrokeWidth(3.0f);
+
         textPaint = new Paint();
         textPaint.setColor(Color.BLACK);
         textPaint.setStrokeWidth(3.0f);
-        textPaint.setTextSize(30f);
+        textPaint.setTextSize(20f);
+
+        headingPaint = new Paint();
+        headingPaint.setColor(Color.BLACK);
+        headingPaint.setTextSize(30f);
+
         gridPaint = new Paint();
         gridPaint.setColor(Color.GRAY);
         xLabel = "";
         yLabel = "";
+        graphName = "";
         gridStep = 0;
         labelStep = 0;
     }
@@ -114,6 +124,7 @@ public class GraphView extends View {
         drawScalePoints(canvas);
         drawPlot(canvas);
         drawAxisLabels(canvas);
+        drawPlotName(canvas);
         if (gridStep != 0) {
             drawGrid(canvas);
         }
@@ -135,6 +146,10 @@ public class GraphView extends View {
                         plotPaint);
             }
         }
+    }
+
+    private void drawPlotName(Canvas canvas) {
+        canvas.drawText(graphName, canvasWidth / 2, textPaint.getTextSize(), headingPaint);
     }
 
     private void drawAxes(Canvas canvas) {
@@ -216,6 +231,8 @@ public class GraphView extends View {
         plotPaint.setColor(color);
     }
 
+    public void setGraphName(String name) { graphName = name; }
+
     public void setScaleYLabelDateFormat(boolean b) {
         isYScaleFormatDate = b;
     }
@@ -236,6 +253,10 @@ public class GraphView extends View {
         textPaint = p;
     }
 
+    public void setHeadingPaint(Paint headingPaint) {
+        this.headingPaint = headingPaint;
+    }
+
     public Paint getPlotPaint() {
         return plotPaint;
     }
@@ -250,6 +271,10 @@ public class GraphView extends View {
 
     public Paint getGridPaint() {
         return gridPaint;
+    }
+
+    public Paint getHeadingPaint() {
+        return headingPaint;
     }
 
     public String getxLabel() {

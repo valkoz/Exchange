@@ -58,6 +58,7 @@ public class AnalyticsFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
 
         String currencyName = ((TextView) v).getText().toString();
+        graph.setGraphName(currencyName);
         List<Date> dates = new ArrayList<>();
         switch (radioGroup.getCheckedRadioButtonId()) {
             case R.id.analytics_filter_week:
@@ -85,17 +86,22 @@ public class AnalyticsFragment extends ListFragment {
     }
 
     private void initGraphStyle() {
-        Paint p1 = new Paint();
-        p1.setColor(getResources().getColor(R.color.colorPrimary));
-        p1.setStrokeWidth(5);
-        graph.setPlotPaint(p1);
+        Paint plotPaint = new Paint();
+        plotPaint.setColor(getResources().getColor(R.color.colorPrimary));
+        plotPaint.setStrokeWidth(5);
+        graph.setPlotPaint(plotPaint);
 
-        Paint p2 = new Paint();
-        p2.setColor(getResources().getColor(R.color.colorPrimary));
-        p2.setTextSize(24f);
-        p2.setFakeBoldText(true);
+        Paint textPaint = new Paint();
+        textPaint.setColor(getResources().getColor(R.color.colorPrimary));
+        textPaint.setTextSize(24f);
+        textPaint.setFakeBoldText(true);
+        graph.setTextPaint(textPaint);
 
-        graph.setTextPaint(p2);
+        Paint headingPaint = new Paint();
+        headingPaint.setColor(getResources().getColor(R.color.colorPrimary));
+        headingPaint.setTextSize(30f);
+        graph.setHeadingPaint(headingPaint);
+
         graph.setGridStep(10);
         graph.setLabelStep(5);
         graph.setScaleYLabelDateFormat(true);

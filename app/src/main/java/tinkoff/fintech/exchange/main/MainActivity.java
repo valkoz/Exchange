@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         navigation.getMenu().getItem(1).setChecked(true);
 
     }
-    
+
     private void checkFirstRun() {
 
         final String PREFS_NAME = "MyPrefsFile";
