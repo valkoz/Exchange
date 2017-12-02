@@ -16,14 +16,14 @@ public interface ExchangeOperationDao {
     @Query("SELECT * FROM ExchangeOperation")
     List<ExchangeOperation> getAll();
 
-    @Query("SELECT * FROM ExchangeOperation WHERE `from` IN(:names) and createdDateTime > :fromDate and createdDateTime < :toDate " +
+    @Query("SELECT * FROM ExchangeOperation WHERE `from` IN(:names) and createdDateTime > :fromDate and createdDateTime <= :toDate " +
             "UNION " +
-            "SELECT * FROM ExchangeOperation WHERE `to` IN(:names) and createdDateTime > :fromDate and createdDateTime < :toDate ")
+            "SELECT * FROM ExchangeOperation WHERE `to` IN(:names) and createdDateTime > :fromDate and createdDateTime <= :toDate ")
     List<ExchangeOperation> getByDateAndName(List<String> names, long fromDate, long toDate);
 
-    @Query("SELECT * FROM ExchangeOperation WHERE createdDateTime > :fromDate and createdDateTime < :toDate " +
+    @Query("SELECT * FROM ExchangeOperation WHERE createdDateTime > :fromDate and createdDateTime <= :toDate " +
             "UNION " +
-            "SELECT * FROM ExchangeOperation WHERE createdDateTime > :fromDate and createdDateTime < :toDate ")
+            "SELECT * FROM ExchangeOperation WHERE createdDateTime > :fromDate and createdDateTime <= :toDate ")
     List<ExchangeOperation> getByDate(long fromDate, long toDate);
 
     @Query("SELECT `from` FROM exchangeoperation GROUP BY `from` UNION SELECT `to` FROM exchangeoperation GROUP BY `to`")

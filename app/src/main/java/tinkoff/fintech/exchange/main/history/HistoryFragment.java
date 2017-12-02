@@ -55,10 +55,18 @@ public class HistoryFragment extends Fragment {
         model = ViewModelProviders.of(this).get(HistoryViewModel.class);
         model.getOperations().observe(this, exchangeOperations -> mAdapter.addAll(exchangeOperations));
         model.getLastQuery().observe(this, historyQuery -> {
-            String lastFilter = "From: " + Formatter.dateToString(historyQuery.getFromDate()) + "\n" +
-                    "To: " + Formatter.dateToString(historyQuery.getToDate()) + "\n" +
-                    "With: " + historyQuery.getCurrencies().toString();
-            currentFilterTextView.setText(lastFilter);
+            if (historyQuery != null) {
+                String lastFilter;
+                if (historyQuery.getCurrencies().isEmpty()) {
+                    lastFilter = "From: " + Formatter.dateToString(historyQuery.getFromDate()) + "\n" +
+                            "To: " + Formatter.dateToString(historyQuery.getToDate());
+                } else {
+                    lastFilter = "From: " + Formatter.dateToString(historyQuery.getFromDate()) + "\n" +
+                            "To: " + Formatter.dateToString(historyQuery.getToDate()) + "\n" +
+                            "With: " + historyQuery.getCurrencies().toString().substring(1, historyQuery.getCurrencies().toString().length() - 1);
+                }
+                currentFilterTextView.setText(lastFilter);
+            }
         });
 
 

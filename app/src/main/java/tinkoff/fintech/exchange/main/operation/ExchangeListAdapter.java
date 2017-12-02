@@ -74,12 +74,17 @@ public class ExchangeListAdapter extends ArrayAdapter<Currency> {
             viewHolder.text
                     .setOnClickListener(view -> {
 
-                        String toCurrency = viewHolder.text.getText().toString();
-                        String fromCurrency = currencies.get(0).getName();
-                        if (fromCurrency.equals(toCurrency))
-                            fromCurrency = currencies.get(1).getName();
+                        String fromCurrency;
+                        String toCurrency;
+
                         if (choosenCurrency != null) {
                             fromCurrency = choosenCurrency.getName();
+                            toCurrency = viewHolder.text.getText().toString();
+                        } else {
+                            fromCurrency = viewHolder.text.getText().toString();
+                            toCurrency = currencies.get(0).getName();
+                            if (fromCurrency.equals(toCurrency))
+                                toCurrency = currencies.get(1).getName();
                         }
 
                         Intent intent = new Intent(context, ExchangeActivity.class);

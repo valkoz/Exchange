@@ -7,4 +7,5 @@
     <string name="two_weeks">14 days</string>
     <string name="month">30 days</string>
     <string name="all">all</string>
+    <string name="no_filter">no Filter</string>
 </resources>
