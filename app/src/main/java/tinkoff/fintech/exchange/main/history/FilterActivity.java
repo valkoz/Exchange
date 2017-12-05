@@ -7,13 +7,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -22,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 import tinkoff.fintech.exchange.R;
+import tinkoff.fintech.exchange.model.Currency;
 import tinkoff.fintech.exchange.model.HistoryQuery;
 import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.util.Formatter;
@@ -51,22 +50,33 @@ public class FilterActivity extends AppCompatActivity {
         submitButton = findViewById(R.id.history_filter_submit);
         rg = findViewById(R.id.history_radioGroup);
 
-        List coins = AppDatabase.getAppDatabase(getApplicationContext()).exchangeOperationDao().getExistingCurrencies();
+        List<String> coins = AppDatabase.getAppDatabase(getApplicationContext()).exchangeOperationDao().getExistingCurrencies();
+        HistoryQuery i = AppDatabase.getAppDatabase(getApplication()).historyQueryDao().get();
 
         mRecyclerView = findViewById(R.id.filter_list_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new FilterRecyclerAdapter(coins, new ArrayList<String>());
+
+        List<Currency> currencies = new ArrayList<Currency>();
+        if (i != null) {
+            for (String coinName: coins) {
+                if (i.getCurrencies().contains(coinName)) {
+                    currencies.add(new Currency(coinName, true));
+                } else {
+                    currencies.add(new Currency(coinName, false));
+                }
+            }
+        } else {
+            for (String coinName: coins) {
+                currencies.add(new Currency(coinName, true));
+            }
+        }
+
+        mAdapter = new FilterRecyclerAdapter(currencies);
         mRecyclerView.setAdapter(mAdapter);
 
         model = ViewModelProviders.of(this).get(FilterViewModel.class);
-
-        HistoryQuery i = AppDatabase.getAppDatabase(getApplication()).historyQueryDao().get();
-        if (i != null) {
-            mAdapter.setChoosenCurrencies(i.getCurrencies());
-        }
-
         model.getEndDate().observe(this, date -> edTo.setText(Formatter.dateToString(date)));
         model.getStartDate().observe(this, date -> edFrom.setText(Formatter.dateToString(date)));
 
@@ -129,10 +139,10 @@ public class FilterActivity extends AppCompatActivity {
                 if (start.getTime() < end.getTime()) {
                     returnIntent.putExtra("from", start.getTime());
                     returnIntent.putExtra("to", end.getTime());
-                    returnIntent.putExtra("currencies", mAdapter.getChoosenCurrencies());
+                    returnIntent.putExtra("currencies", new ArrayList<>(mAdapter.getChosenCurrencies()));
                     setResult(1, returnIntent);
                     AppDatabase.getAppDatabase(getApplicationContext()).historyQueryDao().deleteAll();
-                    AppDatabase.getAppDatabase(getApplicationContext()).historyQueryDao().insert(new HistoryQuery(start, end, mAdapter.getChoosenCurrencies()));
+                    AppDatabase.getAppDatabase(getApplicationContext()).historyQueryDao().insert(new HistoryQuery(start, end, mAdapter.getChosenCurrencies()));
                     finish();
                 }
                 else {

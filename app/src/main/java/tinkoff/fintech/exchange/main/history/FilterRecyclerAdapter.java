@@ -2,7 +2,6 @@ package tinkoff.fintech.exchange.main.history;
 
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tinkoff.fintech.exchange.R;
+import tinkoff.fintech.exchange.model.Currency;
 
 public class FilterRecyclerAdapter extends RecyclerView.Adapter<FilterRecyclerAdapter.ViewHolder> {
 
-    private List<String> mCurrencies;
-    private List<String> mChoosenCurrencies;
+    private List<Currency> mCurrencies;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mText;
@@ -31,8 +30,7 @@ public class FilterRecyclerAdapter extends RecyclerView.Adapter<FilterRecyclerAd
 
     }
 
-    public FilterRecyclerAdapter(List<String> currencies, List<String> choosenCurrencies) {
-        mChoosenCurrencies = choosenCurrencies;
+    public FilterRecyclerAdapter(List<Currency> currencies) {
         mCurrencies = currencies;
     }
 
@@ -47,20 +45,12 @@ public class FilterRecyclerAdapter extends RecyclerView.Adapter<FilterRecyclerAd
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        holder.mText.setText(mCurrencies.get(position));
-
-        for (String cur: mChoosenCurrencies) {
-            if (cur.equals(mCurrencies.get(position))) {
-                holder.mCheckbox.setChecked(true);
-            }
-        }
+        holder.mText.setText(mCurrencies.get(position).getName());
+        holder.mCheckbox.setChecked(mCurrencies.get(position).isFavourite());
 
         holder.mCheckbox
                 .setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    if (isChecked)
-                        mChoosenCurrencies.add(holder.mText.getText().toString());
-                    else
-                        mChoosenCurrencies.remove(holder.mText.getText().toString());
+                        mCurrencies.get(position).setFavourite(isChecked);
                 });
     }
 
@@ -69,13 +59,14 @@ public class FilterRecyclerAdapter extends RecyclerView.Adapter<FilterRecyclerAd
         return mCurrencies.size();
     }
 
-    public ArrayList<String> getChoosenCurrencies() {
-        Log.i("fromAdapter", mChoosenCurrencies.toString());
-        return new ArrayList<>(mChoosenCurrencies);
-    }
-
-    public void setChoosenCurrencies(List<String> currencies) {
-        mChoosenCurrencies = currencies;
+    public List<String> getChosenCurrencies() {
+        List<String> list = new ArrayList<>();
+        for (Currency currency:
+             mCurrencies) {
+            if (currency.isFavourite())
+                list.add(currency.getName());
+        }
+        return list;
     }
 
 }
