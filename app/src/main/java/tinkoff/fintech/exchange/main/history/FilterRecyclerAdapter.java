@@ -47,6 +47,7 @@ public class FilterRecyclerAdapter extends RecyclerView.Adapter<FilterRecyclerAd
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
+        holder.checkbox.setOnCheckedChangeListener(null); // TODO Выпилить на метод viewHolder https://stackoverflow.com/questions/27070220/android-recyclerview-notifydatasetchanged-illegalstateexception
         holder.text.setText(currencies.get(position).getName());
         holder.checkbox.setChecked(currencies.get(position).isFavourite());
         holder.checkbox.setTag(position);

@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,13 +27,12 @@ import static tinkoff.fintech.exchange.main.MainActivity.FROM_CURRENCY;
 import static tinkoff.fintech.exchange.main.MainActivity.TO_CURRENCY;
 
 
-//TODO Use this adapter instead of ListAdapter
 public class ExchangeRecyclerAdapter extends RecyclerView.Adapter<ExchangeRecyclerAdapter.ViewHolder> {
 
-    private final Activity mContext;
-    private List<Currency> mCurrencies;
-    private Currency mChosenCurrency;
-    private TextView mTextView;
+    private List<Currency> currencies;
+    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener;
+    private View.OnClickListener onClickListener;
+    private View.OnLongClickListener onLongClickListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mText;
@@ -45,10 +46,12 @@ public class ExchangeRecyclerAdapter extends RecyclerView.Adapter<ExchangeRecycl
 
     }
 
-    public ExchangeRecyclerAdapter(Activity context, List<Currency> currencies) {
-        mContext = context;
-        mCurrencies = currencies;
-        mTextView = mContext.findViewById(R.id.selected_currency);
+    public ExchangeRecyclerAdapter(List<Currency> currencies, CompoundButton.OnCheckedChangeListener onCheckedChangeListener,
+                                   View.OnClickListener onClickListener, View.OnLongClickListener onLongClickListener) {
+        this.currencies = currencies;
+        this.onCheckedChangeListener = onCheckedChangeListener;
+        this.onClickListener = onClickListener;
+        this.onLongClickListener = onLongClickListener;
     }
 
     @Override
@@ -62,85 +65,30 @@ public class ExchangeRecyclerAdapter extends RecyclerView.Adapter<ExchangeRecycl
     @Override
     public void onBindViewHolder(ExchangeRecyclerAdapter.ViewHolder holder, int position) {
 
-        holder.mText.setText(mCurrencies.get(position).getName());
-        holder.mCheckbox.setChecked(mCurrencies.get(position).isFavourite());
+        // TODO Выпилить на метод viewHolder https://stackoverflow.com/questions/27070220/android-recyclerview-notifydatasetchanged-illegalstateexception
+        holder.mCheckbox.setOnCheckedChangeListener(null);
+        holder.mText.setOnClickListener(null);
+        holder.mText.setOnLongClickListener(null);
 
-        holder.mCheckbox
-                .setOnCheckedChangeListener((buttonView, isChecked) -> {
+        holder.mText.setText(currencies.get(position).getName());
+        holder.mCheckbox.setChecked(currencies.get(position).isFavourite());
 
+        holder.mText.setTag(position);
+        holder.mCheckbox.setTag(position);
 
-                    Currency element = mCurrencies.get(position);
-
-                    //set him to favourite
-                    element.setFavourite(isChecked);
-                    //update in db
-                    updateDb(element);
-                    Collections.sort(mCurrencies);
-
-                    notifyDataSetChanged();
-                });
-
-        holder.mText.setOnClickListener(view -> {
-
-            String toCurrency = holder.mText.getText().toString();
-            String fromCurrency = mCurrencies.get(0).getName();
-            if (fromCurrency.equals(toCurrency))
-                fromCurrency = mCurrencies.get(1).getName();
-            if (mChosenCurrency != null) {
-                fromCurrency = mChosenCurrency.getName();
-            }
-
-            Intent intent = new Intent(mContext, ExchangeActivity.class);
-            intent.putExtra(TO_CURRENCY, toCurrency);
-            intent.putExtra(FROM_CURRENCY, fromCurrency);
-            mContext.startActivity(intent);
-
-        });
-
-        holder.mText.setOnLongClickListener(view -> {
-
-            //add to list
-            if (mChosenCurrency != null)
-                mCurrencies.add(mChosenCurrency);
-
-            //get clicked item
-            Currency element = mCurrencies.get(position);
-            element.increaseUseFrequency();
-
-            //update db
-            updateDb(element);
-
-            //remove from list
-            mChosenCurrency = element;
-            mCurrencies.remove(element);
-
-            Collections.sort(mCurrencies);
-
-            notifyDataSetChanged();
-
-            mTextView = mContext.findViewById(R.id.selected_currency);
-            mTextView.setText(holder.mText.getText());
-            return true;
-        });
+        holder.mCheckbox.setOnCheckedChangeListener(onCheckedChangeListener);
+        holder.mText.setOnClickListener(onClickListener);
+        holder.mText.setOnLongClickListener(onLongClickListener);
 
     }
 
     @Override
     public int getItemCount() {
-        return mCurrencies.size();
+        return currencies.size();
     }
 
-
-    private void updateDb(Currency element) {
-        AsyncTask.execute(() -> AppDatabase.getAppDatabase(mContext)
-                .currencyDao()
-                .update(element));
-    }
-
-    public void setCurrencies(List<Currency> currencies) {
-        //Log.e("setCurrencies", currencies.toString());
-        mCurrencies.clear();
-        mCurrencies = currencies;
+    public void addItems(List<Currency> currencies) {
+        this.currencies = currencies;
         notifyDataSetChanged();
     }
 }
