@@ -7,7 +7,6 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,9 +20,9 @@ import tinkoff.fintech.exchange.util.CalendarIterator;
 
 public class FilterViewModel extends AndroidViewModel {
 
-    private MutableLiveData<Date> mStartDate;
-    private MutableLiveData<Date> mEndDate;
-    private MutableLiveData<List<Currency>> mCurrencies;
+    private MutableLiveData<Date> startDate;
+    private MutableLiveData<Date> endDate;
+    private MutableLiveData<List<Currency>> currencies;
 
     public FilterViewModel(@NonNull Application application) {
         super(application);
@@ -32,72 +31,72 @@ public class FilterViewModel extends AndroidViewModel {
     }
 
     private void setCurrencies() {
-        mCurrencies = new MutableLiveData<List<Currency>>();
+        currencies = new MutableLiveData<List<Currency>>();
         List<String> coins = AppDatabase.getAppDatabase(getApplication()).exchangeOperationDao().getExistingCurrencies();
         HistoryQuery hq = AppDatabase.getAppDatabase(getApplication()).historyQueryDao().get();
 
-        List<Currency> currencies = new ArrayList<Currency>();
+        List<Currency> currencyList = new ArrayList<Currency>();
         if (hq != null) {
             for (String coinName: coins) {
                 if (hq.getCurrencies().contains(coinName)) {
-                    currencies.add(new Currency(coinName, true));
+                    currencyList.add(new Currency(coinName, true));
                 } else {
-                    currencies.add(new Currency(coinName, false));
+                    currencyList.add(new Currency(coinName, false));
                 }
             }
         } else {
             for (String coinName: coins) {
-                currencies.add(new Currency(coinName, true));
+                currencyList.add(new Currency(coinName, true));
             }
         }
-        mCurrencies.postValue(currencies);
+        currencies.postValue(currencyList);
     }
 
     private void setDates() {
-        mStartDate = new MutableLiveData<Date>();
-        mEndDate = new MutableLiveData<Date>();
+        startDate = new MutableLiveData<Date>();
+        endDate = new MutableLiveData<Date>();
         HistoryQuery i = AppDatabase.getAppDatabase(getApplication()).historyQueryDao().get();
         if (i != null) {
-            mStartDate.postValue(i.getFromDate());
-            mEndDate.postValue(i.getToDate());
+            startDate.postValue(i.getFromDate());
+            endDate.postValue(i.getToDate());
         } else {
             updateDates(Calendar.DAY_OF_YEAR);
         }
     }
 
     public LiveData<Date> getStartDate() {
-        return mStartDate;
+        return startDate;
     }
 
     public LiveData<Date> getEndDate() {
-        return mEndDate;
+        return endDate;
     }
 
     public void setStartDate(Calendar calendar) {
-        mStartDate.postValue(calendar.getTime());
+        startDate.postValue(calendar.getTime());
     }
 
     public void setEndDate(Calendar calendar) {
-        mEndDate.postValue(calendar.getTime());
+        endDate.postValue(calendar.getTime());
     }
 
     public void updateDates(int period) {
-        mStartDate.postValue(CalendarIterator.get(period));
-        mEndDate.postValue(new Date());
+        startDate.postValue(CalendarIterator.get(period));
+        endDate.postValue(new Date());
     }
 
     public void updateCurrencies(Object tag, boolean b) {
-        mCurrencies.getValue().get((Integer) tag).setFavourite(b);
+        currencies.getValue().get((Integer) tag).setFavourite(b);
     }
 
     public LiveData<List<Currency>> getCurrencies() {
-        return mCurrencies;
+        return currencies;
     }
 
     public List<String> getChosenCurrencies() {
         List<String> list = new ArrayList<>();
-        List<Currency> currencies = mCurrencies.getValue();
-        for (Currency currency: currencies) {
+        List<Currency> currencyList = currencies.getValue();
+        for (Currency currency: currencyList) {
             if (currency.isFavourite())
                 list.add(currency.getName());
         }

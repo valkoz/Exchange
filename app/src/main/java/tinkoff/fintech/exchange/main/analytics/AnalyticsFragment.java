@@ -25,10 +25,10 @@ import tinkoff.fintech.exchange.util.CalendarIterator;
 
 public class AnalyticsFragment extends ListFragment {
 
-    RadioGroup radioGroup;
-    GraphView graph;
-    ArrayAdapter<String> adapter;
-    AnalyticsViewModel model;
+    private RadioGroup radioGroup;
+    private GraphView graph;
+    private ArrayAdapter<String> adapter;
+    private AnalyticsViewModel model;
 
     public AnalyticsFragment() {}
 

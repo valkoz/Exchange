@@ -22,8 +22,6 @@ import java.util.List;
 
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.model.Currency;
-import tinkoff.fintech.exchange.model.HistoryQuery;
-import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.util.Formatter;
 
 
@@ -34,9 +32,9 @@ public class FilterActivity extends AppCompatActivity {
     private EditText edTo;
     private Button submitButton;
     private RadioGroup rg;
-    private RecyclerView mRecyclerView;
-    private FilterRecyclerAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView recyclerView;
+    private FilterRecyclerAdapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
     private FilterViewModel model;
 
     @Override
@@ -48,7 +46,7 @@ public class FilterActivity extends AppCompatActivity {
         model = ViewModelProviders.of(this).get(FilterViewModel.class);
         model.getEndDate().observe(this, date -> edTo.setText(Formatter.dateToString(date)));
         model.getStartDate().observe(this, date -> edFrom.setText(Formatter.dateToString(date)));
-        model.getCurrencies().observe(this, currencies -> mAdapter.addItems(currencies));
+        model.getCurrencies().observe(this, currencies -> adapter.addItems(currencies));
 
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -126,10 +124,10 @@ public class FilterActivity extends AppCompatActivity {
         submitButton = findViewById(R.id.history_filter_submit);
         rg = findViewById(R.id.history_radioGroup);
 
-        mRecyclerView = findViewById(R.id.filter_list_recycler);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        recyclerView = findViewById(R.id.filter_list_recycler);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
         CompoundButton.OnCheckedChangeListener listener =  new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -138,8 +136,8 @@ public class FilterActivity extends AppCompatActivity {
             }
         };
 
-        mAdapter = new FilterRecyclerAdapter(new ArrayList<Currency>(), listener);
-        mRecyclerView.setAdapter(mAdapter);
+        adapter = new FilterRecyclerAdapter(new ArrayList<Currency>(), listener);
+        recyclerView.setAdapter(adapter);
     }
 
     private View.OnClickListener setTextListener(DatePickerDialog.OnDateSetListener dateListener) {

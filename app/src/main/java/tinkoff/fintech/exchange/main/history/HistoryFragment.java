@@ -24,9 +24,9 @@ public class HistoryFragment extends Fragment {
     private final int REQUEST_CODE = 1;
     private TextView currentFilterTextView;
     private HistoryViewModel model;
-    private RecyclerView mRecyclerView;
-    private HistoryListAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView recyclerView;
+    private HistoryListAdapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
 
     public HistoryFragment() { }
 
@@ -41,16 +41,16 @@ public class HistoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
         currentFilterTextView = view.findViewById(R.id.history_chosen_filter_info);
-        mRecyclerView = view.findViewById(R.id.history_list_recycler);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new HistoryListAdapter(new ArrayList<ExchangeOperation>());
-        mRecyclerView.setAdapter(mAdapter);
+        recyclerView = view.findViewById(R.id.history_list_recycler);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new HistoryListAdapter(new ArrayList<ExchangeOperation>());
+        recyclerView.setAdapter(adapter);
 
 
         model = ViewModelProviders.of(this).get(HistoryViewModel.class);
-        model.getOperations().observe(this, exchangeOperations -> mAdapter.addAll(exchangeOperations));
+        model.getOperations().observe(this, exchangeOperations -> adapter.addAll(exchangeOperations));
         model.getLastQuery().observe(this, historyQuery -> {
             if (historyQuery != null) {
                 String lastFilter;
