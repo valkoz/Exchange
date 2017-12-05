@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -28,73 +29,38 @@ import tinkoff.fintech.exchange.util.Formatter;
 
 public class FilterActivity extends AppCompatActivity {
 
-    Calendar calendar;
-    EditText edFrom;
-    EditText edTo;
-    Button submitButton;
-    RadioGroup rg;
+    private Calendar calendar;
+    private EditText edFrom;
+    private EditText edTo;
+    private Button submitButton;
+    private RadioGroup rg;
     private RecyclerView mRecyclerView;
     private FilterRecyclerAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private FilterViewModel model;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
-
-        calendar = Calendar.getInstance();
-        edFrom = findViewById(R.id.history_filer_from);
-        edTo = findViewById(R.id.history_filer_to);
-        submitButton = findViewById(R.id.history_filter_submit);
-        rg = findViewById(R.id.history_radioGroup);
-
-        List<String> coins = AppDatabase.getAppDatabase(getApplicationContext()).exchangeOperationDao().getExistingCurrencies();
-        HistoryQuery i = AppDatabase.getAppDatabase(getApplication()).historyQueryDao().get();
-
-        mRecyclerView = findViewById(R.id.filter_list_recycler);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        List<Currency> currencies = new ArrayList<Currency>();
-        if (i != null) {
-            for (String coinName: coins) {
-                if (i.getCurrencies().contains(coinName)) {
-                    currencies.add(new Currency(coinName, true));
-                } else {
-                    currencies.add(new Currency(coinName, false));
-                }
-            }
-        } else {
-            for (String coinName: coins) {
-                currencies.add(new Currency(coinName, true));
-            }
-        }
-
-        mAdapter = new FilterRecyclerAdapter(currencies);
-        mRecyclerView.setAdapter(mAdapter);
+        initViews();
 
         model = ViewModelProviders.of(this).get(FilterViewModel.class);
         model.getEndDate().observe(this, date -> edTo.setText(Formatter.dateToString(date)));
         model.getStartDate().observe(this, date -> edFrom.setText(Formatter.dateToString(date)));
+        model.getCurrencies().observe(this, currencies -> mAdapter.addItems(currencies));
 
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
                 switch (checkedId) {
                     case R.id.history_filter_all:
-                        model.updateDates(Calendar.YEAR);
-                        break;
+                        model.updateDates(Calendar.YEAR); break;
                     case R.id.history_filter_week:
-                        model.updateDates(Calendar.WEEK_OF_YEAR);
-                        break;
+                        model.updateDates(Calendar.WEEK_OF_YEAR); break;
                     case R.id.history_filter_month:
-                        model.updateDates(Calendar.MONTH);
-                        break;
-                    default:
-                        break;
+                        model.updateDates(Calendar.MONTH); break;
+                    default: break;
                 }
             }
         });
@@ -125,7 +91,6 @@ public class FilterActivity extends AppCompatActivity {
 
         };
 
-
         edFrom.setOnClickListener(setTextListener(fromDateListener));
         edTo.setOnClickListener(setTextListener(toDateListener));
 
@@ -135,14 +100,14 @@ public class FilterActivity extends AppCompatActivity {
                 Intent returnIntent = new Intent();
                 Date start = model.getStartDate().getValue();
                 Date end = model.getEndDate().getValue();
+                List<String> chosenCurrencies = model.getChosenCurrencies();
 
                 if (start.getTime() < end.getTime()) {
                     returnIntent.putExtra("from", start.getTime());
                     returnIntent.putExtra("to", end.getTime());
-                    returnIntent.putExtra("currencies", new ArrayList<>(mAdapter.getChosenCurrencies()));
+                    returnIntent.putExtra("currencies", new ArrayList<>(chosenCurrencies));
                     setResult(1, returnIntent);
-                    AppDatabase.getAppDatabase(getApplicationContext()).historyQueryDao().deleteAll();
-                    AppDatabase.getAppDatabase(getApplicationContext()).historyQueryDao().insert(new HistoryQuery(start, end, mAdapter.getChosenCurrencies()));
+                    model.updateHistoryQuery(start, end, chosenCurrencies);
                     finish();
                 }
                 else {
@@ -152,6 +117,29 @@ public class FilterActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void initViews() {
+        calendar = Calendar.getInstance();
+        edFrom = findViewById(R.id.history_filer_from);
+        edTo = findViewById(R.id.history_filer_to);
+        submitButton = findViewById(R.id.history_filter_submit);
+        rg = findViewById(R.id.history_radioGroup);
+
+        mRecyclerView = findViewById(R.id.filter_list_recycler);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        CompoundButton.OnCheckedChangeListener listener =  new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                model.updateCurrencies(compoundButton.getTag(), b);
+            }
+        };
+
+        mAdapter = new FilterRecyclerAdapter(new ArrayList<Currency>(), listener);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private View.OnClickListener setTextListener(DatePickerDialog.OnDateSetListener dateListener) {

@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import tinkoff.fintech.exchange.R;
@@ -16,22 +16,24 @@ import tinkoff.fintech.exchange.model.Currency;
 
 public class FilterRecyclerAdapter extends RecyclerView.Adapter<FilterRecyclerAdapter.ViewHolder> {
 
-    private List<Currency> mCurrencies;
+    private List<Currency> currencies;
+    private CompoundButton.OnCheckedChangeListener listener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mText;
-        public CheckBox mCheckbox;
+        public TextView text;
+        public CheckBox checkbox;
 
         public ViewHolder(View v) {
             super(v);
-            mText = v.findViewById(R.id.label);
-            mCheckbox = v.findViewById(R.id.check);
+            text = v.findViewById(R.id.label);
+            checkbox = v.findViewById(R.id.check);
         }
 
     }
 
-    public FilterRecyclerAdapter(List<Currency> currencies) {
-        mCurrencies = currencies;
+    public FilterRecyclerAdapter(List<Currency> currencies, CompoundButton.OnCheckedChangeListener listener) {
+        this.currencies = currencies;
+        this.listener = listener;
     }
 
     @Override
@@ -45,28 +47,19 @@ public class FilterRecyclerAdapter extends RecyclerView.Adapter<FilterRecyclerAd
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        holder.mText.setText(mCurrencies.get(position).getName());
-        holder.mCheckbox.setChecked(mCurrencies.get(position).isFavourite());
-
-        holder.mCheckbox
-                .setOnCheckedChangeListener((buttonView, isChecked) -> {
-                        mCurrencies.get(position).setFavourite(isChecked);
-                });
+        holder.text.setText(currencies.get(position).getName());
+        holder.checkbox.setChecked(currencies.get(position).isFavourite());
+        holder.checkbox.setTag(position);
+        holder.checkbox.setOnCheckedChangeListener(listener);
     }
 
     @Override
     public int getItemCount() {
-        return mCurrencies.size();
+        return currencies.size();
     }
 
-    public List<String> getChosenCurrencies() {
-        List<String> list = new ArrayList<>();
-        for (Currency currency:
-             mCurrencies) {
-            if (currency.isFavourite())
-                list.add(currency.getName());
-        }
-        return list;
+    public void addItems(List<Currency> currencies) {
+        this.currencies = currencies;
     }
 
 }
