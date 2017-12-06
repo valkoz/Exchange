@@ -13,7 +13,7 @@ import tinkoff.fintech.exchange.model.Currency;
 @Dao
 public interface CurrencyDao {
 
-    @Query("SELECT * FROM currency")
+    @Query("SELECT * FROM currency ORDER BY isFavourite DESC, useFrequency DESC")
     List<Currency> getAll();
 
     @Query("SELECT name FROM currency WHERE name != :name ORDER BY isFavourite DESC, useFrequency DESC")

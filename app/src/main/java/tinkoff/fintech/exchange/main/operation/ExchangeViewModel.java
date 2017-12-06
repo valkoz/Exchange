@@ -5,10 +5,9 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import tinkoff.fintech.exchange.model.Currency;
@@ -25,28 +24,29 @@ public class ExchangeViewModel extends AndroidViewModel {
         super(application);
         currencies = new MutableLiveData<List<Currency>>();
         chosenCurrency = new MutableLiveData<>();
-        currencies.postValue(getFromBd());
+        currencies.postValue(getAllCurrenciesFromDb());
     }
 
     public LiveData<List<Currency>> getCurrencies() {
         return currencies;
     }
 
-    private List<Currency> getFromBd() {
-        List<Currency> list = AppDatabase.getAppDatabase(getApplication()).currencyDao().getAll();
-        Collections.sort(list);
-        return list;
+    private List<Currency> getAllCurrenciesFromDb() {
+        return AppDatabase.getAppDatabase(getApplication()).currencyDao().getAll();
+    }
+
+    private List<Currency> getAllCurrenciesFromDbExcept(String name) {
+        return AppDatabase.getAppDatabase(getApplication()).currencyDao().getCurrenciesExcept(chosenCurrency.getValue().getName());
     }
 
     public void updateCurrencies() {
-        List<Currency> list = getFromBd();
-        Currency toRemove = new Currency();
-        for (Currency c: list) {
-            if (c.getName().equals(chosenCurrency.getValue().getName())) {
-                toRemove = c;
-            }
+        List<Currency> list = new ArrayList<>();
+        if (chosenCurrency.getValue() != null) {
+            list = getAllCurrenciesFromDbExcept(chosenCurrency.getValue().getName());
         }
-        list.remove(toRemove);
+        else {
+            list = getAllCurrenciesFromDb();
+        }
         currencies.postValue(list);
     }
 
@@ -54,8 +54,8 @@ public class ExchangeViewModel extends AndroidViewModel {
     public void updateOnCheckChanged(Integer tag, boolean isChecked) {
         Currency element = currencies.getValue().get(tag);
         element.setFavourite(isChecked);
-        updateDb(element);
-        Collections.sort(currencies.getValue());
+        updateSingleCurrency(element);
+        updateCurrencies();
     }
 
     public void updateOnLongClick(Integer tag) {
@@ -63,14 +63,11 @@ public class ExchangeViewModel extends AndroidViewModel {
             currencies.getValue().add(chosenCurrency.getValue());
         Currency element = currencies.getValue().get(tag);
         chosenCurrency.setValue(element);
-        currencies.getValue().remove(element);
-        Collections.sort(currencies.getValue());
+        updateCurrencies();
     }
 
-    private void updateDb(Currency element) {
-        AsyncTask.execute(() -> AppDatabase.getAppDatabase(getApplication())
-                .currencyDao()
-                .update(element));
+    private void updateSingleCurrency(Currency element) {
+       AppDatabase.getAppDatabase(getApplication()).currencyDao().update(element);
     }
 
     public ExchangePair getCurrencyPair(String text) {
