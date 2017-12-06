@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.model.Currency;
+import tinkoff.fintech.exchange.pojo.ExchangePair;
 
 import static tinkoff.fintech.exchange.main.MainActivity.FROM_CURRENCY;
 import static tinkoff.fintech.exchange.main.MainActivity.TO_CURRENCY;
@@ -65,12 +66,11 @@ public class ExchangeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 TextView view = (TextView) v;
-                String fromCurrency = model.getFromCurrency(view.getText().toString());
-                String toCurrency = model.getToCurrency(view.getText().toString());
+                ExchangePair pair = model.getCurrencyPair(view.getText().toString());
 
                 Intent intent = new Intent(getContext(), ExchangeActivity.class);
-                intent.putExtra(TO_CURRENCY, toCurrency);
-                intent.putExtra(FROM_CURRENCY, fromCurrency);
+                intent.putExtra(TO_CURRENCY, pair.getToCurrency());
+                intent.putExtra(FROM_CURRENCY, pair.getFromCurrency());
                 startActivityForResult(intent,2);
             }
         };

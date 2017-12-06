@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 import tinkoff.fintech.exchange.model.Currency;
+import tinkoff.fintech.exchange.pojo.ExchangePair;
 import tinkoff.fintech.exchange.util.AppDatabase;
 
 public class ExchangeViewModel extends AndroidViewModel {
@@ -60,9 +61,7 @@ public class ExchangeViewModel extends AndroidViewModel {
                 .update(element));
     }
 
-
-    //TODO Выпилить этот бред
-    public String getFromCurrency(String text) {
+    public ExchangePair getCurrencyPair(String text) {
         String fromCurrency;
         String toCurrency;
         if (chosenCurrency.getValue() != null) {
@@ -74,21 +73,7 @@ public class ExchangeViewModel extends AndroidViewModel {
             if (fromCurrency.equals(toCurrency))
                 toCurrency = currencies.getValue().get(1).getName();
         }
-        return fromCurrency;
+        return new ExchangePair(fromCurrency, toCurrency);
     }
 
-    public String getToCurrency(String text) {
-        String fromCurrency;
-        String toCurrency;
-        if (chosenCurrency.getValue() != null) {
-            fromCurrency = chosenCurrency.getValue().getName();
-            toCurrency = text;
-        } else {
-            fromCurrency = text;
-            toCurrency = currencies.getValue().get(0).getName();
-            if (fromCurrency.equals(toCurrency))
-                toCurrency = currencies.getValue().get(1).getName();
-        }
-        return toCurrency;
-    }
 }

@@ -1,30 +1,18 @@
 package tinkoff.fintech.exchange.main.operation;
 
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import tinkoff.fintech.exchange.R;
-import tinkoff.fintech.exchange.main.history.FilterRecyclerAdapter;
 import tinkoff.fintech.exchange.model.Currency;
-import tinkoff.fintech.exchange.util.AppDatabase;
-
-import static tinkoff.fintech.exchange.main.MainActivity.FROM_CURRENCY;
-import static tinkoff.fintech.exchange.main.MainActivity.TO_CURRENCY;
 
 
 public class ExchangeRecyclerAdapter extends RecyclerView.Adapter<ExchangeRecyclerAdapter.ViewHolder> {
@@ -35,13 +23,13 @@ public class ExchangeRecyclerAdapter extends RecyclerView.Adapter<ExchangeRecycl
     private View.OnLongClickListener onLongClickListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mText;
-        public CheckBox mCheckbox;
+        public TextView textView;
+        public CheckBox checkBox;
 
         public ViewHolder(View v) {
             super(v);
-            mText = v.findViewById(R.id.label);
-            mCheckbox = v.findViewById(R.id.check);
+            textView = v.findViewById(R.id.label);
+            checkBox = v.findViewById(R.id.check);
         }
 
     }
@@ -65,20 +53,19 @@ public class ExchangeRecyclerAdapter extends RecyclerView.Adapter<ExchangeRecycl
     @Override
     public void onBindViewHolder(ExchangeRecyclerAdapter.ViewHolder holder, int position) {
 
-        // TODO Выпилить на метод viewHolder https://stackoverflow.com/questions/27070220/android-recyclerview-notifydatasetchanged-illegalstateexception
-        holder.mCheckbox.setOnCheckedChangeListener(null);
-        holder.mText.setOnClickListener(null);
-        holder.mText.setOnLongClickListener(null);
+        holder.checkBox.setOnCheckedChangeListener(null);
+        holder.textView.setOnClickListener(null);
+        holder.textView.setOnLongClickListener(null);
 
-        holder.mText.setText(currencies.get(position).getName());
-        holder.mCheckbox.setChecked(currencies.get(position).isFavourite());
+        holder.textView.setText(currencies.get(position).getName());
+        holder.checkBox.setChecked(currencies.get(position).isFavourite());
 
-        holder.mText.setTag(position);
-        holder.mCheckbox.setTag(position);
+        holder.textView.setTag(position);
+        holder.checkBox.setTag(position);
 
-        holder.mCheckbox.setOnCheckedChangeListener(onCheckedChangeListener);
-        holder.mText.setOnClickListener(onClickListener);
-        holder.mText.setOnLongClickListener(onLongClickListener);
+        holder.checkBox.setOnCheckedChangeListener(onCheckedChangeListener);
+        holder.textView.setOnClickListener(onClickListener);
+        holder.textView.setOnLongClickListener(onLongClickListener);
 
     }
 
