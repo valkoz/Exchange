@@ -20,14 +20,16 @@ import tinkoff.fintech.exchange.util.CalendarIterator;
 
 public class FilterViewModel extends AndroidViewModel {
 
-    private Calendar calendar;
+    private Calendar startCalendar;
+    private Calendar endCalendar;
     private MutableLiveData<Date> startDate;
     private MutableLiveData<Date> endDate;
     private MutableLiveData<List<CheckableCurrency>> currencies;
 
     public FilterViewModel(@NonNull Application application) {
         super(application);
-        calendar = Calendar.getInstance();
+        startCalendar = Calendar.getInstance();
+        endCalendar = Calendar.getInstance();
         setDates();
         setCurrencies();
     }
@@ -75,20 +77,28 @@ public class FilterViewModel extends AndroidViewModel {
     }
 
     public void setStartDate(int year, int monthOfYear, int dayOfMonth) {
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, monthOfYear);
-        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        calendar.set(Calendar.HOUR, 0);
-        calendar.set(Calendar.MINUTE, 0);
+        startCalendar.set(Calendar.YEAR, year);
+        startCalendar.set(Calendar.MONTH, monthOfYear);
+        startCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        startCalendar.clear(Calendar.AM_PM);
+        startCalendar.clear(Calendar.HOUR_OF_DAY);
+        startCalendar.clear(Calendar.MINUTE);
+        startCalendar.clear(Calendar.SECOND);
+        startCalendar.clear(Calendar.MILLISECOND);
 
-        startDate.postValue(calendar.getTime());
+        startDate.postValue(startCalendar.getTime());
     }
 
     public void setEndDate(int year, int monthOfYear, int dayOfMonth) {
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, monthOfYear);
-        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        endDate.postValue(calendar.getTime());
+        endCalendar.set(Calendar.YEAR, year);
+        endCalendar.set(Calendar.MONTH, monthOfYear);
+        endCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        endCalendar.set(Calendar.HOUR_OF_DAY, 23);
+        endCalendar.clear(Calendar.AM_PM);
+        endCalendar.set(Calendar.MINUTE, 59);
+        endCalendar.clear(Calendar.SECOND);
+        endCalendar.clear(Calendar.MILLISECOND);
+        endDate.postValue(endCalendar.getTime());
     }
 
     public void updateDates(int period) {
@@ -123,14 +133,14 @@ public class FilterViewModel extends AndroidViewModel {
     }
 
     public int getCurrentDayOfMonth() {
-        return calendar.get(Calendar.DAY_OF_MONTH);
+        return startCalendar.get(Calendar.DAY_OF_MONTH);
     }
 
     public int getCurrentMonth() {
-        return calendar.get(Calendar.MONTH);
+        return startCalendar.get(Calendar.MONTH);
     }
 
     public int getCurrentYear() {
-        return calendar.get(Calendar.YEAR);
+        return startCalendar.get(Calendar.YEAR);
     }
 }
