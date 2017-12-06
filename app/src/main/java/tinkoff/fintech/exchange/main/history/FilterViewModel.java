@@ -20,12 +20,14 @@ import tinkoff.fintech.exchange.util.CalendarIterator;
 
 public class FilterViewModel extends AndroidViewModel {
 
+    private Calendar calendar;
     private MutableLiveData<Date> startDate;
     private MutableLiveData<Date> endDate;
     private MutableLiveData<List<CheckableCurrency>> currencies;
 
     public FilterViewModel(@NonNull Application application) {
         super(application);
+        calendar = Calendar.getInstance();
         setDates();
         setCurrencies();
     }
@@ -72,11 +74,20 @@ public class FilterViewModel extends AndroidViewModel {
         return endDate;
     }
 
-    public void setStartDate(Calendar calendar) {
+    public void setStartDate(int year, int monthOfYear, int dayOfMonth) {
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, monthOfYear);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+
         startDate.postValue(calendar.getTime());
     }
 
-    public void setEndDate(Calendar calendar) {
+    public void setEndDate(int year, int monthOfYear, int dayOfMonth) {
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, monthOfYear);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         endDate.postValue(calendar.getTime());
     }
 
@@ -109,5 +120,17 @@ public class FilterViewModel extends AndroidViewModel {
             AppDatabase.getAppDatabase(getApplication()).historyQueryDao().deleteAll();
             AppDatabase.getAppDatabase(getApplication()).historyQueryDao().insert(hq);
         });
+    }
+
+    public int getCurrentDayOfMonth() {
+        return calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public int getCurrentMonth() {
+        return calendar.get(Calendar.MONTH);
+    }
+
+    public int getCurrentYear() {
+        return calendar.get(Calendar.YEAR);
     }
 }

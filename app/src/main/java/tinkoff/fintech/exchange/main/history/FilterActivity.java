@@ -27,7 +27,6 @@ import tinkoff.fintech.exchange.util.Formatter;
 
 public class FilterActivity extends AppCompatActivity {
 
-    private Calendar calendar;
     private EditText edFrom;
     private EditText edTo;
     private Button submitButton;
@@ -48,9 +47,7 @@ public class FilterActivity extends AppCompatActivity {
         model.getStartDate().observe(this, date -> edFrom.setText(Formatter.dateToString(date)));
         model.getCurrencies().observe(this, currencies -> adapter.addItems(currencies));
 
-        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+        rg.setOnCheckedChangeListener((RadioGroup radioGroup, int checkedId) -> {
                 switch (checkedId) {
                     case R.id.history_filter_all:
                         model.updateDates(Calendar.YEAR); break;
@@ -60,41 +57,16 @@ public class FilterActivity extends AppCompatActivity {
                         model.updateDates(Calendar.MONTH); break;
                     default: break;
                 }
-            }
         });
 
-        DatePickerDialog.OnDateSetListener fromDateListener = new DatePickerDialog.OnDateSetListener() {
+        edFrom.setOnClickListener(setTextListener(
+                (DatePicker view, int year, int monthOfYear, int dayOfMonth) ->
+                        model.setStartDate(year, monthOfYear, dayOfMonth)));
+        edTo.setOnClickListener(setTextListener(
+                (DatePicker view, int year, int monthOfYear, int dayOfMonth) ->
+                        model.setEndDate(year, monthOfYear, dayOfMonth)));
 
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, monthOfYear);
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                model.setStartDate(calendar);
-            }
-
-        };
-
-        DatePickerDialog.OnDateSetListener toDateListener = new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, monthOfYear);
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                model.setEndDate(calendar);
-            }
-
-        };
-
-        edFrom.setOnClickListener(setTextListener(fromDateListener));
-        edTo.setOnClickListener(setTextListener(toDateListener));
-
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        submitButton.setOnClickListener(view ->  {
                 Intent returnIntent = new Intent();
                 Date start = model.getStartDate().getValue();
                 Date end = model.getEndDate().getValue();
@@ -112,13 +84,12 @@ public class FilterActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Enter correct dates",
                             Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
+            });
 
     }
 
     private void initViews() {
-        calendar = Calendar.getInstance();
+
         edFrom = findViewById(R.id.history_filer_from);
         edTo = findViewById(R.id.history_filer_to);
         submitButton = findViewById(R.id.history_filter_submit);
@@ -129,26 +100,18 @@ public class FilterActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        CompoundButton.OnCheckedChangeListener listener =  new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                model.updateCurrencies(compoundButton.getTag(), b);
-            }
-        };
-
-        adapter = new FilterRecyclerAdapter(new ArrayList<CheckableCurrency>(), listener);
+        adapter = new FilterRecyclerAdapter(new ArrayList<CheckableCurrency>(),
+                (CompoundButton compoundButton, boolean isChecked) ->
+                        model.updateCurrencies(compoundButton.getTag(), isChecked));
         recyclerView.setAdapter(adapter);
     }
 
     private View.OnClickListener setTextListener(DatePickerDialog.OnDateSetListener dateListener) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        return view ->  {
                 rg.clearCheck();
-                new DatePickerDialog(FilterActivity.this, dateListener, calendar
-                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        };
+                new DatePickerDialog(FilterActivity.this, dateListener, model.getCurrentYear(),
+                        model.getCurrentMonth(),
+                        model.getCurrentDayOfMonth()).show();
+            };
     }
 }
