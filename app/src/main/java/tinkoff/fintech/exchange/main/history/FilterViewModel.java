@@ -13,8 +13,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import tinkoff.fintech.exchange.model.Currency;
 import tinkoff.fintech.exchange.model.HistoryQuery;
+import tinkoff.fintech.exchange.pojo.CheckableCurrency;
 import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.util.CalendarIterator;
 
@@ -22,7 +22,7 @@ public class FilterViewModel extends AndroidViewModel {
 
     private MutableLiveData<Date> startDate;
     private MutableLiveData<Date> endDate;
-    private MutableLiveData<List<Currency>> currencies;
+    private MutableLiveData<List<CheckableCurrency>> currencies;
 
     public FilterViewModel(@NonNull Application application) {
         super(application);
@@ -31,22 +31,22 @@ public class FilterViewModel extends AndroidViewModel {
     }
 
     private void setCurrencies() {
-        currencies = new MutableLiveData<List<Currency>>();
+        currencies = new MutableLiveData<List<CheckableCurrency>>();
         List<String> coins = AppDatabase.getAppDatabase(getApplication()).exchangeOperationDao().getExistingCurrencies();
         HistoryQuery hq = AppDatabase.getAppDatabase(getApplication()).historyQueryDao().get();
 
-        List<Currency> currencyList = new ArrayList<Currency>();
+        List<CheckableCurrency> currencyList = new ArrayList<CheckableCurrency>();
         if (hq != null) {
             for (String coinName: coins) {
                 if (hq.getCurrencies().contains(coinName)) {
-                    currencyList.add(new Currency(coinName, true));
+                    currencyList.add(new CheckableCurrency(coinName, true));
                 } else {
-                    currencyList.add(new Currency(coinName, false));
+                    currencyList.add(new CheckableCurrency(coinName, false));
                 }
             }
         } else {
             for (String coinName: coins) {
-                currencyList.add(new Currency(coinName, true));
+                currencyList.add(new CheckableCurrency(coinName, true));
             }
         }
         currencies.postValue(currencyList);
@@ -86,18 +86,18 @@ public class FilterViewModel extends AndroidViewModel {
     }
 
     public void updateCurrencies(Object tag, boolean b) {
-        currencies.getValue().get((Integer) tag).setFavourite(b);
+        currencies.getValue().get((Integer) tag).setChecked(b);
     }
 
-    public LiveData<List<Currency>> getCurrencies() {
+    public LiveData<List<CheckableCurrency>> getCurrencies() {
         return currencies;
     }
 
     public List<String> getChosenCurrencies() {
         List<String> list = new ArrayList<>();
-        List<Currency> currencyList = currencies.getValue();
-        for (Currency currency: currencyList) {
-            if (currency.isFavourite())
+        List<CheckableCurrency> currencyList = currencies.getValue();
+        for (CheckableCurrency currency: currencyList) {
+            if (currency.isChecked())
                 list.add(currency.getName());
         }
         return list;

@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import tinkoff.fintech.exchange.R;
-import tinkoff.fintech.exchange.model.Currency;
+import tinkoff.fintech.exchange.pojo.CheckableCurrency;
 import tinkoff.fintech.exchange.util.Formatter;
 
 
@@ -136,7 +136,7 @@ public class FilterActivity extends AppCompatActivity {
             }
         };
 
-        adapter = new FilterRecyclerAdapter(new ArrayList<Currency>(), listener);
+        adapter = new FilterRecyclerAdapter(new ArrayList<CheckableCurrency>(), listener);
         recyclerView.setAdapter(adapter);
     }
 

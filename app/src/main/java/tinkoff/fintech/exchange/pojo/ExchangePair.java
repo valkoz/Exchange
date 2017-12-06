@@ -1,8 +1,8 @@
 package tinkoff.fintech.exchange.pojo;
 
 public class ExchangePair {
-    String fromCurrency;
-    String toCurrency;
+    private String fromCurrency;
+    private String toCurrency;
 
     public ExchangePair(String fromCurrency, String toCurrency) {
         this.fromCurrency = fromCurrency;

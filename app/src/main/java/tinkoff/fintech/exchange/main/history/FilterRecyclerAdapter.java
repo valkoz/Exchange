@@ -12,11 +12,11 @@ import android.widget.TextView;
 import java.util.List;
 
 import tinkoff.fintech.exchange.R;
-import tinkoff.fintech.exchange.model.Currency;
+import tinkoff.fintech.exchange.pojo.CheckableCurrency;
 
 public class FilterRecyclerAdapter extends RecyclerView.Adapter<FilterRecyclerAdapter.ViewHolder> {
 
-    private List<Currency> currencies;
+    private List<CheckableCurrency> currencies;
     private CompoundButton.OnCheckedChangeListener listener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -31,7 +31,7 @@ public class FilterRecyclerAdapter extends RecyclerView.Adapter<FilterRecyclerAd
 
     }
 
-    public FilterRecyclerAdapter(List<Currency> currencies, CompoundButton.OnCheckedChangeListener listener) {
+    public FilterRecyclerAdapter(List<CheckableCurrency> currencies, CompoundButton.OnCheckedChangeListener listener) {
         this.currencies = currencies;
         this.listener = listener;
     }
@@ -49,7 +49,7 @@ public class FilterRecyclerAdapter extends RecyclerView.Adapter<FilterRecyclerAd
 
         holder.checkbox.setOnCheckedChangeListener(null);
         holder.text.setText(currencies.get(position).getName());
-        holder.checkbox.setChecked(currencies.get(position).isFavourite());
+        holder.checkbox.setChecked(currencies.get(position).isChecked());
         holder.checkbox.setTag(position);
         holder.checkbox.setOnCheckedChangeListener(listener);
     }
@@ -59,7 +59,7 @@ public class FilterRecyclerAdapter extends RecyclerView.Adapter<FilterRecyclerAd
         return currencies.size();
     }
 
-    public void addItems(List<Currency> currencies) {
+    public void addItems(List<CheckableCurrency> currencies) {
         this.currencies = currencies;
     }
 
