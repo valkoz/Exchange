@@ -19,6 +19,9 @@ public interface CurrencyDao {
     @Query("SELECT name FROM currency WHERE name != :name ORDER BY isFavourite DESC, useFrequency DESC")
     List<String> getCurrencyNamesExcept(String name);
 
+    @Query("SELECT * FROM currency WHERE name != :name ORDER BY isFavourite DESC, useFrequency DESC")
+    List<Currency> getCurrenciesExcept(String name);
+
     @Insert
     void insertAll(Currency... currencies);
 

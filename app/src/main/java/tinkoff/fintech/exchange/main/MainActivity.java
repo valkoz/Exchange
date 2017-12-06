@@ -82,11 +82,4 @@ public class MainActivity extends AppCompatActivity {
         prefs.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode).apply();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //FIXME Костыль
-        if (requestCode == 2)
-            recreate();
-    }
 }

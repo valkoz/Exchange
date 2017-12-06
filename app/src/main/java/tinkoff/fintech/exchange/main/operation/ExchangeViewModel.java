@@ -38,6 +38,18 @@ public class ExchangeViewModel extends AndroidViewModel {
         return list;
     }
 
+    public void updateCurrencies() {
+        List<Currency> list = getFromBd();
+        Currency toRemove = new Currency();
+        for (Currency c: list) {
+            if (c.getName().equals(chosenCurrency.getValue().getName())) {
+                toRemove = c;
+            }
+        }
+        list.remove(toRemove);
+        currencies.postValue(list);
+    }
+
 
     public void updateOnCheckChanged(Integer tag, boolean isChecked) {
         Currency element = currencies.getValue().get(tag);
