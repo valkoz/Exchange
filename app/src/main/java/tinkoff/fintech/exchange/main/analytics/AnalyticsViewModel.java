@@ -16,8 +16,8 @@ import java.util.Date;
 import java.util.List;
 
 import tinkoff.fintech.exchange.enums.CurrencyName;
-import tinkoff.fintech.exchange.network.ErrorType;
-import tinkoff.fintech.exchange.network.RateObject;
+import tinkoff.fintech.exchange.enums.ErrorType;
+import tinkoff.fintech.exchange.pojo.RateObject;
 import tinkoff.fintech.exchange.network.RateWithDateCallback;
 import tinkoff.fintech.exchange.network.RetrofitClient;
 import tinkoff.fintech.exchange.util.AppDatabase;

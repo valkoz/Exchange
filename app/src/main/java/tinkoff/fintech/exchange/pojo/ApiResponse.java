@@ -1,4 +1,4 @@
-package tinkoff.fintech.exchange.network;
+package tinkoff.fintech.exchange.pojo;
 
 import java.util.Date;
 

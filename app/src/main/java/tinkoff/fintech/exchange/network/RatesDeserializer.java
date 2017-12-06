@@ -11,6 +11,8 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Set;
 
+import tinkoff.fintech.exchange.pojo.RateObject;
+
 public class RatesDeserializer implements JsonDeserializer<RateObject> {
     @Nullable
     public RateObject deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {

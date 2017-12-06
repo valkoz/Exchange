@@ -1,4 +1,4 @@
-package tinkoff.fintech.exchange.network;
+package tinkoff.fintech.exchange.enums;
 
 public enum ErrorType {
     NULL_BODY,

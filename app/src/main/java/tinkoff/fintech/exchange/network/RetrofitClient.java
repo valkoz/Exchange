@@ -16,6 +16,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import tinkoff.fintech.exchange.BuildConfig;
+import tinkoff.fintech.exchange.enums.ErrorType;
+import tinkoff.fintech.exchange.pojo.ApiResponse;
+import tinkoff.fintech.exchange.pojo.RateObject;
 
 public class RetrofitClient {
 

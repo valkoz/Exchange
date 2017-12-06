@@ -1,13 +1,11 @@
 package tinkoff.fintech.exchange.main.operation;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,11 +16,10 @@ import java.util.Objects;
 
 import tinkoff.fintech.exchange.R;
 import tinkoff.fintech.exchange.main.MainActivity;
-import tinkoff.fintech.exchange.main.history.FilterViewModel;
 import tinkoff.fintech.exchange.model.ExchangeOperation;
-import tinkoff.fintech.exchange.network.ErrorType;
+import tinkoff.fintech.exchange.enums.ErrorType;
 import tinkoff.fintech.exchange.network.RateCallback;
-import tinkoff.fintech.exchange.network.RateObject;
+import tinkoff.fintech.exchange.pojo.RateObject;
 import tinkoff.fintech.exchange.network.RetrofitClient;
 import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.util.Formatter;
