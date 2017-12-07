@@ -15,15 +15,15 @@ import java.util.Calendar;
 import java.util.Objects;
 
 import tinkoff.fintech.exchange.R;
+import tinkoff.fintech.exchange.enums.ErrorType;
 import tinkoff.fintech.exchange.main.MainActivity;
 import tinkoff.fintech.exchange.model.ExchangeOperation;
-import tinkoff.fintech.exchange.enums.ErrorType;
 import tinkoff.fintech.exchange.network.RateCallback;
-import tinkoff.fintech.exchange.pojo.RateObject;
 import tinkoff.fintech.exchange.network.RetrofitClient;
+import tinkoff.fintech.exchange.pojo.RateObject;
 import tinkoff.fintech.exchange.util.AppDatabase;
 import tinkoff.fintech.exchange.util.Formatter;
-//TODO Refactor
+
 public class ExchangeActivity extends AppCompatActivity {
 
     private TextView tv;
