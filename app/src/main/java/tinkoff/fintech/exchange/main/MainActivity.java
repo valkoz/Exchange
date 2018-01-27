@@ -24,15 +24,19 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = item -> {
-                switch (item.getItemId()) {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_content);
+        switch (item.getItemId()) {
                     case R.id.navigation_history:
-                        chooseFragment(HistoryFragment.newInstance());
+                        if (!(currentFragment instanceof HistoryFragment))
+                            chooseFragment(HistoryFragment.newInstance());
                         return true;
                     case R.id.navigation_exchange:
-                        chooseFragment(ExchangeFragment.newInstance());
+                        if (!(currentFragment instanceof ExchangeFragment))
+                            chooseFragment(ExchangeFragment.newInstance());
                         return true;
                     case R.id.navigation_analytics:
-                        chooseFragment(AnalyticsFragment.newInstance());
+                        if (!(currentFragment instanceof AnalyticsFragment))
+                            chooseFragment(AnalyticsFragment.newInstance());
                         return true;
                 }
                 return false;
