@@ -82,6 +82,7 @@ public class ExchangeViewModel extends AndroidViewModel {
             if (fromCurrency.equals(toCurrency))
                 toCurrency = currencies.getValue().get(1).getName();
         }
+        chosenCurrency.postValue(null);
         return new ExchangePair(fromCurrency, toCurrency);
     }
 

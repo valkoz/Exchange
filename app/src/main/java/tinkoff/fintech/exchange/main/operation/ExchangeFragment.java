@@ -97,6 +97,7 @@ public class ExchangeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        textView.setText("");
         model.updateCurrencies();
     }
 }
