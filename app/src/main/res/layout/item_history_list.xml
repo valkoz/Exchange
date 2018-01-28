@@ -6,19 +6,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/history_datetime"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textColor="@color/colorPrimary"
-        android:hint="datetime"/>
+        android:hint="@string/datetime"/>
 
     <TextView
         android:id="@+id/history_from"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:hint="from"
+        android:hint="@string/from"
         android:text="@+id/history_from"
         android:textColor="@color/colorPrimary"
-        android:textSize="20dp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/history_to"
@@ -26,10 +26,10 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="150dp"
         android:layout_marginTop="20dp"
-        android:hint="to"
+        android:hint="@string/to"
         android:text="@+id/history_to"
         android:textColor="@color/colorPrimary"
-        android:textSize="20dp" />
+        android:textSize="20sp" />
 
 
     <TextView
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="20dp"
-        android:hint="f_v"
+        android:hint="@string/f_v"
         android:text="@+id/history_from_value"
         android:textColor="@color/colorPrimary"
         android:textSize="20dp" />
@@ -49,9 +49,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="200dp"
         android:layout_marginTop="20dp"
-        android:hint="t_v"
+        android:hint="@string/t_v"
         android:text="@+id/history_to_value"
         android:textColor="@color/colorPrimary"
-        android:textSize="20dp" />
+        android:textSize="20sp" />
 
 </RelativeLayout>

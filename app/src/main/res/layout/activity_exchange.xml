@@ -12,7 +12,7 @@
             android:id="@+id/first_currency"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="from"
+            android:text="@string/from"
             android:textSize="30sp"
             />
         <EditText
@@ -22,6 +22,7 @@
             android:inputType="numberDecimal"
             android:textSize="30sp"
             android:text="@string/one"
+            android:maxLength="10"
             android:focusedByDefault="true"
             />
 
@@ -42,7 +43,7 @@
             android:id="@+id/second_currency"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="to"
+            android:text="@string/to"
             android:textSize="30sp"
             android:paddingLeft="10sp"
             />

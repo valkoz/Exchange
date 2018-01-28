@@ -54,12 +54,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="from"/>
+            android:text="@string/from"/>
         <EditText
             android:id="@+id/history_filer_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="dd/mm/yy"
+            android:hint="@string/dd_mm_yy"
             android:cursorVisible="false"
             android:focusableInTouchMode="false"
             android:inputType="date" />
@@ -67,12 +67,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="to"/>
+            android:text="@string/to"/>
         <EditText
             android:id="@+id/history_filer_to"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="dd/mm/yy"
+            android:hint="@string/dd_mm_yy"
             android:cursorVisible="false"
             android:focusableInTouchMode="false"
             android:inputType="date"/>
@@ -90,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/filter_list_recycler"
-        android:text="submit"
+        android:text="@string/submit"
         android:layout_centerHorizontal="true"/>
 
 

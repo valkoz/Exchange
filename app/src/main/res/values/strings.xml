@@ -9,4 +9,11 @@
     <string name="all">all</string>
     <string name="no_filter">no Filter</string>
     <string name="one">1</string>
+    <string name="from">from</string>
+    <string name="to">to</string>
+    <string name="dd_mm_yy">dd/mm/yy</string>
+    <string name="submit">submit</string>
+    <string name="datetime">datetime</string>
+    <string name="f_v">f_v</string>
+    <string name="t_v">t_v</string>
 </resources>
