@@ -15,18 +15,18 @@ public class GraphView extends View {
     private float xCords[];
     private float yCords[];
 
-    private int labelStep;
-    private int gridStep;
     private Paint plotPaint;
     private Paint axesPaint;
     private Paint textPaint;
     private Paint gridPaint;
     private Paint headingPaint;
 
-    private String graphName;
-    private String xLabel;
-    private String yLabel;
-    private boolean isYScaleFormatDate;
+    private int labelStep = 0;
+    private int gridStep = 0;
+    private String graphName = "";
+    private String xLabel = "";
+    private String yLabel = "";
+    private boolean isYScaleFormatDate = false;
 
     private float canvasWidth;
     private float canvasHeight;
@@ -87,7 +87,7 @@ public class GraphView extends View {
     }
 
     private void init(AttributeSet attrs, int defStyle) {
-        isYScaleFormatDate = false;
+
         plotPaint = new Paint();
         plotPaint.setColor(plotColor);
         plotPaint.setStrokeWidth(3.0f);
@@ -107,11 +107,6 @@ public class GraphView extends View {
 
         gridPaint = new Paint();
         gridPaint.setColor(Color.GRAY);
-        xLabel = "";
-        yLabel = "";
-        graphName = "";
-        gridStep = 0;
-        labelStep = 0;
     }
 
     @Override
