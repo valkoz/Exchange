@@ -29,6 +29,7 @@ public class ExchangeFragment extends Fragment {
     private ExchangeRecyclerAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private TextView textView;
+    private static final int REQUEST_CODE = 2;
 
 
     public ExchangeFragment() {}
@@ -71,7 +72,7 @@ public class ExchangeFragment extends Fragment {
                 Intent intent = new Intent(getContext(), ExchangeActivity.class);
                 intent.putExtra(TO_CURRENCY, pair.getToCurrency());
                 intent.putExtra(FROM_CURRENCY, pair.getFromCurrency());
-                startActivityForResult(intent,2);
+                startActivityForResult(intent, REQUEST_CODE);
             }
         };
 
@@ -96,8 +97,10 @@ public class ExchangeFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        textView.setText("");
-        model.updateCurrencies();
+        if (requestCode == REQUEST_CODE) {
+            super.onActivityResult(requestCode, resultCode, data);
+            textView.setText("");
+            model.updateCurrencies();
+        }
     }
 }
