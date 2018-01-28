@@ -119,6 +119,7 @@ public class ExchangeActivity extends AppCompatActivity {
                             "fixer.io api error",
                             Toast.LENGTH_SHORT)
                             .show();
+                finish();
             }
         };
 
