@@ -22,6 +22,7 @@ import tinkoff.fintech.exchange.pojo.RateObject;
 
 public class RetrofitClient {
 
+    private static final int TOO_MANY_REQUESTS = 429;
     private static RetrofitClient instance = null;
     private final String BASE_URL = "http://api.fixer.io/";
 
@@ -88,6 +89,9 @@ public class RetrofitClient {
             @Override
             public void onResponse(@NonNull Call<ApiResponse> call, @NonNull Response<ApiResponse> response) {
                 if (response != null) {
+                    if (response.code() == TOO_MANY_REQUESTS) {
+                        callback.onError(ErrorType.TOO_MANY_REQUESTS);
+                    }
                     if (response.body() != null) {
                         RateObject rate = response.body().getRates();
                         Date date = response.body().getDate();

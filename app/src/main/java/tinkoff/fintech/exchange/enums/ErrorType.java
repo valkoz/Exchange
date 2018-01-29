@@ -2,5 +2,5 @@ package tinkoff.fintech.exchange.enums;
 
 public enum ErrorType {
     NULL_BODY,
-    REQUEST_ERROR
+    TOO_MANY_REQUESTS, REQUEST_ERROR
 }

@@ -6,6 +6,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.tinkoff.fintech.news.simpleplot.GraphPoint;
 
@@ -70,7 +71,12 @@ public class AnalyticsViewModel extends AndroidViewModel {
             }
 
             @Override
-            public void onError(ErrorType type) { }
+            public void onError(ErrorType type) {
+                if (type == ErrorType.TOO_MANY_REQUESTS)
+                    Toast.makeText(getApplication(),
+                            "You have exceeded available limit. Try later",
+                            Toast.LENGTH_SHORT).show();
+            }
         };
 
         for (Date date : dates) {
